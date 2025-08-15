@@ -15,6 +15,7 @@ This is a modern web application for booking bus tickets, built with React and V
 
 ## Technologies Used
 *   **Frontend:** React.js
+*   **Backend:** Go
 *   **Build Tool:** Vite
 *   **State Management:** Zustand
 *   **Routing:** React Router DOM
@@ -53,6 +54,24 @@ To get a local copy up and running, follow these simple steps.
     yarn dev
     ```
     The application will be accessible at `http://localhost:5173` (or another port if 5173 is in use).
+
+### Backend
+
+1.  **Navigate to the backend directory:**
+    ```bash
+    cd backend
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    go mod tidy
+    ```
+
+3.  **Run the backend server:**
+    ```bash
+    go run main.go
+    ```
+    The backend server will be running on `http://localhost:8080`.
 
 4.  **Build for production:**
     ```bash
