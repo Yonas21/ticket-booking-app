@@ -106,5 +106,5 @@ Contributions are what make the open-source community such an amazing place to l
 Distributed under the MIT License. See `LICENSE` for more information. (Note: If a LICENSE file exists, ensure it's included. Otherwise, consider adding one.)
 
 ## Contact
-Your Name - your_email@example.com
-Project Link: [https://github.com/your-username/bus-ticket-app](https://github.com/your-username/bus-ticket-app) (Note: Replace with actual project link)
+Yonas Alem - yonalem21@gmail.com
+Project Link: [https://github.com/your-username/bus-ticket-app](https://github.com/Yonas21/bus-ticket-app) (Note: Replace with actual project link)
