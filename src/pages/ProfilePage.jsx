@@ -1,17 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
-import tripsData from '../data/trips.json';
+import { getProfile } from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 const ProfilePage = () => {
-  const { user } = useAuthStore();
+  const { user, setUser } = useAuthStore();
   const { t } = useTranslation();
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [currentTripToReview, setCurrentTripToReview] = useState(null);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const profileData = await getProfile();
+        if (profileData) {
+          setUser(profileData);
+        } else {
+          toast.error(t('common.failedToLoadProfile'));
+        }
+      } catch (error) {
+        console.error("Failed to fetch profile:", error);
+        toast.error(t('common.failedToLoadProfile'));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (!user) {
+      fetchProfile();
+    } else {
+      setLoading(false);
+    }
+  }, [user, setUser, t]);
+
+  if (loading) {
+    return (
+      <div className="custom-loader">
+        <div className="spinner"></div>
+        <p>{t('common.loadingProfile')}</p>
+      </div>
+    );
+  }
 
   if (!user) {
     return <div className="container slick-design py-5">{t('common.loginToViewProfile')}</div>;
@@ -51,16 +85,8 @@ const ProfilePage = () => {
     };
 
     // Simulate adding review to the trip data (in a real app, this would be an API call)
-    const tripIndex = tripsData.findIndex(t => t.id === currentTripToReview.tripId);
-    if (tripIndex !== -1) {
-      if (!tripsData[tripIndex].reviews) {
-        tripsData[tripIndex].reviews = [];
-      }
-      tripsData[tripIndex].reviews.push(newReview);
-      toast.success(t('common.reviewSubmitted'));
-    } else {
-      toast.error(t('common.couldNotFindTrip'));
-    }
+    // This part still uses mock data as there's no backend API for reviews
+    toast.info(t('common.reviewSubmissionMock'));
 
     // Reset form and hide
     setRating(5);
