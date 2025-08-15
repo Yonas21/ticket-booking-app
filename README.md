@@ -107,4 +107,4 @@ Distributed under the MIT License. See `LICENSE` for more information. (Note: If
 
 ## Contact
 Yonas Alem - yonalem21@gmail.com
-Project Link: [https://github.com/your-username/bus-ticket-app](https://github.com/Yonas21/bus-ticket-app) (Note: Replace with actual project link)
+Project Link: [https://github.com/Yonas21/bus-ticket-app](https://github.com/Yonas21/bus-ticket-app)
