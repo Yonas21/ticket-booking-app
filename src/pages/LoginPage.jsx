@@ -26,7 +26,7 @@ const LoginPage = () => {
        <div className="row align-items-center g-lg-5 py-5">
         <div className="col-md-10 mx-auto col-lg-5">
           <form className="p-4 p-md-5 border rounded-3 bg-white shadow" onSubmit={handleLogin}>
-            <h2 class="text-center mb-4">{t('common.login')}</h2>
+            <h2 className="text-center mb-4">{t('common.login')}</h2>
             <div className="form-floating mb-3">
               <input 
                 type="email" 
