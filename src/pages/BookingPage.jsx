@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
-import { getTripById } from '../services/api';
+import { getTripById, createBooking } from '../services/api';
 import SeatSelection from '../components/SeatSelection';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 // Mock promo codes
 const mockPromoCodes = [
@@ -13,7 +14,7 @@ const mockPromoCodes = [
 
 const BookingPage = () => {
   const { id } = useParams();
-  const { user, addBooking, currency } = useAuthStore(); // Get currency from store
+  const { user, currency } = useAuthStore(); // Get currency from store
   const [trip, setTrip] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,43 +86,41 @@ const BookingPage = () => {
     }
   };
 
-  const handleBooking = () => {
+  const handleBooking = async () => {
     if (selectedSeats.length !== numberOfPassengers) {
-      alert(t('common.selectExactlySeats', { count: numberOfPassengers }));
+      toast.error(t('common.selectExactlySeats', { count: numberOfPassengers }));
       return;
     }
 
-    let currentPassengerName = user ? user.name : passengerName;
-    let currentPassengerEmail = user ? user.email : passengerEmail;
-
-    if (!user && (!currentPassengerName || !currentPassengerEmail)) {
-      alert(t('common.enterNameEmail'));
+    if (!user) {
+      toast.error(t('common.loginRequired'));
       return;
     }
 
-    const bookingDetails = {
-      id: Date.now(),
-      tripId: trip.id,
-      from: trip.from,
-      to: trip.to,
-      date: trip.date,
-      departureTime: trip.departureTime,
-      selectedSeats: selectedSeats,
-      price: calculateTotalPrice(), // Use calculated price
-      basePrice: trip.originalPriceUSD * numberOfPassengers, // Store original price
-      discountApplied: discountAmount, // Store discount amount
-      promoCodeUsed: promoCode.toUpperCase(), // Store promo code used
-      passengerName: currentPassengerName,
-      passengerEmail: currentPassengerEmail,
-      numberOfPassengers: numberOfPassengers,
-      currency: currency, // Store currency used for booking
-    };
-
-    if (user) {
-      addBooking(bookingDetails);
+    try {
+      const response = await createBooking(trip.id, selectedSeats);
+      if (response.message === "Booking created successfully") {
+        toast.success(t('common.bookingSuccessful'));
+        const bookingDetails = {
+          ...response.booking,
+          from: trip.from,
+          to: trip.to,
+          date: trip.date,
+          departureTime: trip.departureTime,
+          price: calculateTotalPrice(),
+          passengerName: user ? user.name : passengerName,
+          passengerEmail: user ? user.email : passengerEmail,
+          numberOfPassengers: numberOfPassengers,
+          selectedSeats: selectedSeats
+        };
+        navigate('/booking-confirmation', { state: { bookingDetails } });
+      } else {
+        toast.error(response.error || t('common.bookingFailed'));
+      }
+    } catch (error) {
+      console.error("Booking failed:", error);
+      toast.error(t('common.bookingFailed'));
     }
-    
-    navigate('/booking-confirmation', { state: { bookingDetails } });
   };
 
   if (loading) {
