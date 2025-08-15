@@ -53,7 +53,7 @@ const HomePage = () => {
     setTo(to);
   };
 
-  const personalizedRecommendations = user && user.preferredLocations.length > 0
+  const personalizedRecommendations = user && user.preferredLocations && user.preferredLocations.length > 0
     ? trips.filter(trip => user.preferredLocations.includes(trip.from))
     : [];
 
