@@ -1,0 +1,89 @@
+[
+  {
+    "id": 1,
+    "from": "New York",
+    "to": "Boston",
+    "date": "2025-09-10",
+    "departureTime": "09:00",
+    "arrivalTime": "13:00",
+    "price": 45,
+    "seatsAvailable": 25,
+    "busOperator": "Greyhound",
+    "duration": "4 hours",
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4"],
+    "amenities": ["Wi-Fi", "Power Outlets", "Restroom"],
+    "intermediateStops": ["Hartford, CT", "Springfield, MA"],
+    "reviews": [
+      { "id": 1, "rating": 5, "comment": "Great trip, comfortable seats!", "reviewer": "Alice" },
+      { "id": 2, "rating": 4, "comment": "On time and smooth ride.", "reviewer": "Bob" }
+    ]
+  },
+  {
+    "id": 2,
+    "from": "New York",
+    "to": "Boston",
+    "date": "2025-09-10",
+    "departureTime": "11:30",
+    "arrivalTime": "15:30",
+    "price": 50,
+    "seatsAvailable": 15,
+    "busOperator": "Peter Pan",
+    "duration": "4 hours",
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4"],
+    "amenities": ["Wi-Fi", "Restroom"],
+    "intermediateStops": ["New Haven, CT"],
+    "reviews": [
+      { "id": 3, "rating": 3, "comment": "A bit crowded, but got there on time.", "reviewer": "Charlie" }
+    ]
+  },
+  {
+    "id": 3,
+    "from": "Boston",
+    "to": "New York",
+    "date": "2025-09-12",
+    "departureTime": "10:00",
+    "arrivalTime": "14:00",
+    "price": 45,
+    "seatsAvailable": 30,
+    "busOperator": "Greyhound",
+    "duration": "4 hours",
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4"],
+    "amenities": ["Wi-Fi", "Power Outlets", "Restroom", "Reclining Seats"],
+    "intermediateStops": ["Providence, RI", "Stamford, CT"],
+    "reviews": []
+  },
+  {
+    "id": 4,
+    "from": "Los Angeles",
+    "to": "Las Vegas",
+    "date": "2025-09-15",
+    "departureTime": "14:00",
+    "arrivalTime": "19:00",
+    "price": 60,
+    "seatsAvailable": 10,
+    "busOperator": "Tufesa",
+    "duration": "5 hours",
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4"],
+    "amenities": ["Restroom", "Air Conditioning"],
+    "intermediateStops": ["Barstow, CA"],
+    "reviews": [
+      { "id": 4, "rating": 5, "comment": "Smooth ride to Vegas!", "reviewer": "David" }
+    ]
+  },
+  {
+    "id": 5,
+    "from": "Las Vegas",
+    "to": "Los Angeles",
+    "date": "2025-09-18",
+    "departureTime": "12:00",
+    "arrivalTime": "17:00",
+    "price": 60,
+    "seatsAvailable": 20,
+    "busOperator": "Tufesa",
+    "duration": "5 hours",
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4"],
+    "amenities": ["Restroom", "Air Conditioning", "USB Charging"],
+    "intermediateStops": ["Primm, NV"],
+    "reviews": []
+  }
+]
