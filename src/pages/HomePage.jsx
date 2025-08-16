@@ -20,11 +20,9 @@ const HomePage = () => {
   const { t } = useTranslation();
   const [from, setFrom] = useState(locations[0] || '');
   const [to, setTo] = useState(locations[1] || '');
-  const [departureDate, setDepartureDate] = useState(new Date('2025-09-10'));
+  const [departureDate, setDepartureDate] = useState(new Date());
   const [returnDate, setReturnDate] = useState(null);
   const [isRoundTrip, setIsRoundTrip] = useState(false);
-  const [isFlexibleDates, setIsFlexibleDates] = useState(false);
-  const [flexibleDateRange, setFlexibleDateRange] = useState(1); // +/- 1 day by default
   const navigate = useNavigate();
 
   const handleSearch = (e) => {
@@ -38,10 +36,6 @@ const HomePage = () => {
 
     if (isRoundTrip && returnDate) {
       queryParams.returnDate = returnDate.toISOString().split('T')[0];
-    }
-
-    if (isFlexibleDates) {
-      queryParams.flexibleDateRange = flexibleDateRange;
     }
 
     const query = new URLSearchParams(queryParams).toString();
@@ -72,21 +66,38 @@ const HomePage = () => {
             <form className="p-4 p-md-5 border rounded-3 bg-white shadow" onSubmit={handleSearch} aria-labelledby="search-heading">
               <h2 id="search-heading" className="visually-hidden">{t('common.search')} {t('common.busTickets')}</h2>
               <div className="form-floating mb-3">
-                <select className="form-select" id="from" value={from} onChange={(e) => setFrom(e.target.value)} required aria-label={t('common.departureLocation')}>
-                  {locations.map(location => (
-                    <option key={location} value={location}>{location}</option>
-                  ))}
-                </select>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="from"
+                  value={from}
+                  onChange={(e) => setFrom(e.target.value)}
+                  required
+                  aria-label={t('common.departureLocation')}
+                  list="locations"
+                  placeholder={t('common.from')}
+                />
                 <label htmlFor="from">{t('common.from')}</label>
               </div>
               <div className="form-floating mb-3">
-                <select className="form-select" id="to" value={to} onChange={(e) => setTo(e.target.value)} required aria-label={t('common.arrivalLocation')}>
-                  {locations.map(location => (
-                    <option key={location} value={location}>{location}</option>
-                  ))}
-                </select>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="to"
+                  value={to}
+                  onChange={(e) => setTo(e.target.value)}
+                  required
+                  aria-label={t('common.arrivalLocation')}
+                  list="locations"
+                  placeholder={t('common.to')}
+                />
                 <label htmlFor="to">{t('common.to')}</label>
               </div>
+              <datalist id="locations">
+                {locations.map(location => (
+                  <option key={location} value={location} />
+                ))}
+              </datalist>
               <div className="mb-3">
                 <label htmlFor="departureDate" className="form-label">{t('common.departureDate')}</label>
                 <DatePicker
@@ -123,33 +134,6 @@ const HomePage = () => {
                     required
                     aria-label={t('common.returnDate')}
                   />
-                </div>
-              )}
-              <div className="form-check mb-3">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="flexibleDatesCheck"
-                  checked={isFlexibleDates}
-                  onChange={(e) => setIsFlexibleDates(e.target.checked)}
-                />
-                <label className="form-check-label" htmlFor="flexibleDatesCheck">
-                  {t('common.flexibleDates')}
-                </label>
-              </div>
-              {isFlexibleDates && (
-                <div className="mb-3">
-                  <label htmlFor="flexibleDateRange" className="form-label">+/- {t('common.days')}</label>
-                  <select
-                    id="flexibleDateRange"
-                    className="form-select"
-                    value={flexibleDateRange}
-                    onChange={(e) => setFlexibleDateRange(parseInt(e.target.value, 10))}
-                  >
-                    <option value="1">1 {t('common.day')}</option>
-                    <option value="2">2 {t('common.days')}</option>
-                    <option value="3">3 {t('common.days')}</option>
-                  </select>
                 </div>
               )}
               <button className="w-100 btn btn-lg btn-primary" type="submit">{t('common.searchBuses')}</button>
