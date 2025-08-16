@@ -11,6 +11,8 @@
     "search": "Search",
     "from": "From",
     "to": "To",
+    "selectDepartureLocation": "Select Departure Location",
+    "selectArrivalLocation": "Select Arrival Location",
     "departureDate": "Departure Date",
     "roundTrip": "Round Trip",
     "returnDate": "Return Date",

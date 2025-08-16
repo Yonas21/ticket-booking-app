@@ -6,14 +6,9 @@ import trips from '../data/trips.json';
 import useAuthStore from '../store/authStore';
 import BusCard from '../components/BusCard';
 import { useTranslation } from 'react-i18next';
+import { ethiopianLocations, popularRoutes } from '../data/locations';
 
 const locations = [...new Set(trips.flatMap(trip => [trip.from, trip.to]))];
-
-const popularRoutes = [
-  { from: 'New York', to: 'Boston' },
-  { from: 'Los Angeles', to: 'Las Vegas' },
-  { from: 'Boston', to: 'New York' },
-];
 
 const HomePage = () => {
   const { user } = useAuthStore();
@@ -65,39 +60,38 @@ const HomePage = () => {
           <div className="col-md-10 mx-auto col-lg-5">
             <form className="p-4 p-md-5 border rounded-3 bg-white shadow" onSubmit={handleSearch} aria-labelledby="search-heading">
               <h2 id="search-heading" className="visually-hidden">{t('common.search')} {t('common.busTickets')}</h2>
-              <div className="form-floating mb-3">
-                <input
-                  type="text"
+              <div className="mb-3">
+                <label htmlFor="from" className="form-label">{t('common.from')}</label>
+                <select
                   className="form-control"
                   id="from"
                   value={from}
                   onChange={(e) => setFrom(e.target.value)}
                   required
                   aria-label={t('common.departureLocation')}
-                  list="locations"
-                  placeholder={t('common.from')}
-                />
-                <label htmlFor="from">{t('common.from')}</label>
+                >
+                  <option value="">{t('common.selectDepartureLocation')}</option>
+                  {ethiopianLocations.map(location => (
+                    <option key={location} value={location}>{location}</option>
+                  ))}
+                </select>
               </div>
-              <div className="form-floating mb-3">
-                <input
-                  type="text"
+              <div className="mb-3">
+                <label htmlFor="to" className="form-label">{t('common.to')}</label>
+                <select
                   className="form-control"
                   id="to"
                   value={to}
                   onChange={(e) => setTo(e.target.value)}
                   required
                   aria-label={t('common.arrivalLocation')}
-                  list="locations"
-                  placeholder={t('common.to')}
-                />
-                <label htmlFor="to">{t('common.to')}</label>
+                >
+                  <option value="">{t('common.selectArrivalLocation')}</option>
+                  {ethiopianLocations.map(location => (
+                    <option key={location} value={location}>{location}</option>
+                  ))}
+                </select>
               </div>
-              <datalist id="locations">
-                {locations.map(location => (
-                  <option key={location} value={location} />
-                ))}
-              </datalist>
               <div className="mb-3">
                 <label htmlFor="departureDate" className="form-label">{t('common.departureDate')}</label>
                 <DatePicker
