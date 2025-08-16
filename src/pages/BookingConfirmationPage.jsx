@@ -2,11 +2,23 @@ import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { useTranslation } from 'react-i18next';
+import useAuthStore from '../store/authStore';
 
 const BookingConfirmationPage = () => {
+  const { currency } = useAuthStore();
   const location = useLocation();
   const { bookingDetails } = location.state || {};
   const { t } = useTranslation();
+
+  const getCurrencySymbol = (currencyCode) => {
+    switch (currencyCode) {
+      case 'USD': return '$';
+      case 'EUR': return '€';
+      case 'GBP': return '£';
+      case 'ETB': return t('common.currencySymbolETB');
+      default: return '$';
+    }
+  };
 
   if (!bookingDetails) {
     return (
@@ -42,7 +54,7 @@ const BookingConfirmationPage = () => {
                 </div>
                 <div className="col-md-6">
                   <p className="mb-1"><strong>{t('common.bookingId')}:</strong> {bookingDetails.id}</p>
-                  <p className="mb-1"><strong>{t('common.totalPrice')}:</strong> ${bookingDetails.price}</p>
+                  <p className="mb-1"><strong>{t('common.totalPrice')}:</strong> {getCurrencySymbol(currency)}{bookingDetails.price}</p>
                   <p className="mb-1"><strong>{t('common.numberOfPassengers')}:</strong> {bookingDetails.numberOfPassengers || 1}</p>
                   <p className="mb-1"><strong>{t('common.selectedSeats')}:</strong> {Array.isArray(bookingDetails.selectedSeats) ? bookingDetails.selectedSeats.join(', ') : bookingDetails.selectedSeat}</p>
                 </div>
