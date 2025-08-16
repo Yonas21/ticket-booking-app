@@ -65,6 +65,7 @@ const Header = () => {
                 <option value="USD">USD</option>
                 <option value="EUR">EUR</option>
                 <option value="GBP">GBP</option>
+                <option value="ETB">ETB</option>
               </select>
 
               {/* Auth Buttons */}
