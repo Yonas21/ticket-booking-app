@@ -13,6 +13,8 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import BookingConfirmationPage from './pages/BookingConfirmationPage';
 import SupportPage from './pages/SupportPage';
+import PaymentPage from './pages/PaymentPage';
+import ErrorBoundary from './components/ErrorBoundary';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './i18n'; // Import i18n configuration
@@ -43,20 +45,23 @@ function App() {
   return (
     <I18nextProvider i18n={i18n}>
       <Router>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<HomePage />} />
-            <Route path="search" element={<SearchResultsPage />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="signup" element={<SignUpPage />} />
-            <Route path="booking/:id" element={<BookingPage />} />
-            <Route path="profile" element={<ProfilePage />} />
-            <Route path="about" element={<AboutPage />} />
-            <Route path="contact" element={<ContactPage />} />
-            <Route path="booking-confirmation" element={<BookingConfirmationPage />} />
-            <Route path="support" element={<SupportPage />} />
-          </Route>
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<HomePage />} />
+              <Route path="search" element={<SearchResultsPage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="signup" element={<SignUpPage />} />
+              <Route path="booking/:id" element={<BookingPage />} />
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="about" element={<AboutPage />} />
+              <Route path="contact" element={<ContactPage />} />
+              <Route path="booking-confirmation" element={<BookingConfirmationPage />} />
+              <Route path="support" element={<SupportPage />} />
+              <Route path="payment" element={<PaymentPage />} />
+            </Route>
+          </Routes>
+        </ErrorBoundary>
         <button
           className="btn btn-primary rounded-circle shadow-lg"
           style={{
