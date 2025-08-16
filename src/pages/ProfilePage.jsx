@@ -4,15 +4,26 @@ import useAuthStore from '../store/authStore';
 import { getProfile } from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const ProfilePage = () => {
-  const { user, setUser } = useAuthStore();
+  const { user, setUser, currency } = useAuthStore();
   const { t } = useTranslation();
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [currentTripToReview, setCurrentTripToReview] = useState(null);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(true);
+
+  const getCurrencySymbol = (currencyCode) => {
+    switch (currencyCode) {
+      case 'USD': return '$';
+      case 'EUR': return '€';
+      case 'GBP': return '£';
+      case 'ETB': return 'ETB';
+      default: return '$';
+    }
+  };
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -39,12 +50,7 @@ const ProfilePage = () => {
   }, [user, setUser, t]);
 
   if (loading) {
-    return (
-      <div className="custom-loader">
-        <div className="spinner"></div>
-        <p>{t('common.loadingProfile')}</p>
-      </div>
-    );
+    return <LoadingSpinner message="common.loadingProfile" />;
   }
 
   if (!user) {
@@ -103,7 +109,7 @@ const ProfilePage = () => {
         <p className="card-text"><strong>{t('common.departure')}:</strong> {booking.departureTime}</p>
         <p className="card-text"><strong>{t('common.selectedSeats')}:</strong> {Array.isArray(booking.selectedSeats) ? booking.selectedSeats.join(', ') : booking.selectedSeat}</p>
         <p className="card-text"><strong>{t('common.numberOfPassengers')}:</strong> {booking.numberOfPassengers || 1}</p>
-        <p className="card-text"><strong>{t('common.totalPrice')}:</strong> ${booking.price}</p>
+        <p className="card-text"><strong>{t('common.totalPrice')}:</strong> {getCurrencySymbol(currency)}{booking.price}</p>
         <div className="mt-3">
           <Link
             to={'/booking-confirmation'}
