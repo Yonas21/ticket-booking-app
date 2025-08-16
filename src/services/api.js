@@ -5,6 +5,7 @@ const exchangeRates = {
   'USD': 1,
   'EUR': 0.92, // 1 USD = 0.92 EUR
   'GBP': 0.79, // 1 USD = 0.79 GBP
+  'ETB': 140.50, // 1 USD = 140.50 ETB
 };
 
 const getConvertedPrice = (priceUSD, targetCurrency) => {
@@ -12,7 +13,7 @@ const getConvertedPrice = (priceUSD, targetCurrency) => {
   return (priceUSD * rate).toFixed(2);
 };
 
-export const searchTrips = async (from, to, date, flexibleDateRange, currency = 'USD') => {
+export const searchTrips = async (from, to, date, flexibleDateRange, currency = 'ETB') => {
   const params = new URLSearchParams({ from, to, date, flexibleDateRange, currency });
   const response = await fetch(`${API_URL}/trips/search?${params}`);
   const results = await response.json();
@@ -28,7 +29,7 @@ export const searchTrips = async (from, to, date, flexibleDateRange, currency = 
   });
 };
 
-export const getTripById = async (id, currency = 'USD') => {
+export const getTripById = async (id, currency = 'ETB') => {
   const token = localStorage.getItem('token');
   const response = await fetch(`${API_URL}/trips/${id}`, {
     headers: {
