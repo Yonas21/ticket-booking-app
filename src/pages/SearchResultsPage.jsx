@@ -12,7 +12,9 @@ const SearchResultsPage = () => {
   const [filterOperator, setFilterOperator] = useState('All');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
-  const [sortBy, setSortBy] = useState('priceAsc'); // priceAsc, priceDesc, departureAsc, departureDesc
+  const [amenities, setAmenities] = useState([]);
+  const [departureTime, setDepartureTime] = useState('All');
+  const [sortBy, setSortBy] = useState('priceAsc'); // priceAsc, priceDesc, departureAsc, departureDesc, durationAsc, durationDesc
   const { t } = useTranslation();
 
   const from = searchParams.get('from');
@@ -40,6 +42,20 @@ const SearchResultsPage = () => {
         results = results.filter(trip => trip.price <= parseFloat(maxPrice));
       }
 
+      // Apply amenities filter
+      if (amenities.length > 0) {
+        results = results.filter(trip => amenities.every(amenity => trip.amenities.includes(amenity)));
+      }
+
+      // Apply departure time filter
+      if (departureTime !== 'All') {
+        const [start, end] = departureTime.split('-').map(time => parseInt(time));
+        results = results.filter(trip => {
+          const departureHour = new Date(`2000/01/01 ${trip.departureTime}`).getHours();
+          return departureHour >= start && departureHour < end;
+        });
+      }
+
       // Apply sorting
       results.sort((a, b) => {
         if (sortBy === 'priceAsc') {
@@ -50,6 +66,10 @@ const SearchResultsPage = () => {
           return new Date(`2000/01/01 ${a.departureTime}`) - new Date(`2000/01/01 ${b.departureTime}`);
         } else if (sortBy === 'departureDesc') {
           return new Date(`2000/01/01 ${b.departureTime}`) - new Date(`2000/01/01 ${a.departureTime}`);
+        } else if (sortBy === 'durationAsc') {
+          return a.duration - b.duration;
+        } else if (sortBy === 'durationDesc') {
+          return b.duration - a.duration;
         }
         return 0;
       });
@@ -61,7 +81,12 @@ const SearchResultsPage = () => {
     if (from && to && departureDate) {
       fetchAndFilterTrips();
     }
-  }, [from, to, departureDate, flexibleDateRange, filterOperator, minPrice, maxPrice, sortBy]);
+  }, [from, to, departureDate, flexibleDateRange, filterOperator, minPrice, maxPrice, sortBy, amenities, departureTime]);
+
+  const handleAmenityChange = (e) => {
+    const { value, checked } = e.target;
+    setAmenities(prev => checked ? [...prev, value] : prev.filter(item => item !== value));
+  };
 
   return (
     <div className="container slick-design">
@@ -121,7 +146,43 @@ const SearchResultsPage = () => {
 
               <input type="radio" className="btn-check" name="sortBy" id="departureDesc" autoComplete="off" checked={sortBy === 'departureDesc'} onChange={() => setSortBy('departureDesc')} />
               <label className="btn btn-outline-primary" htmlFor="departureDesc">{t('common.departureLateToEarly')} <i className="bi bi-arrow-down"></i></label>
+
+              <input type="radio" className="btn-check" name="sortBy" id="durationAsc" autoComplete="off" checked={sortBy === 'durationAsc'} onChange={() => setSortBy('durationAsc')} />
+              <label className="btn btn-outline-primary" htmlFor="durationAsc">{t('common.durationShortToLong')} <i className="bi bi-arrow-up"></i></label>
+
+              <input type="radio" className="btn-check" name="sortBy" id="durationDesc" autoComplete="off" checked={sortBy === 'durationDesc'} onChange={() => setSortBy('durationDesc')} />
+              <label className="btn btn-outline-primary" htmlFor="durationDesc">{t('common.durationLongToShort')} <i className="bi bi-arrow-down"></i></label>
             </div>
+          </div>
+          <div className="col-md-6">
+            <label className="form-label d-block">{t('common.amenities')}:</label>
+            <div className="form-check form-check-inline">
+              <input className="form-check-input" type="checkbox" id="wifi" value="Wi-Fi" onChange={handleAmenityChange} />
+              <label className="form-check-label" htmlFor="wifi">{t('common.wifi')}</label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input className="form-check-input" type="checkbox" id="restroom" value="Restroom" onChange={handleAmenityChange} />
+              <label className="form-check-label" htmlFor="restroom">{t('common.restroom')}</label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input className="form-check-input" type="checkbox" id="powerOutlet" value="Power Outlet" onChange={handleAmenityChange} />
+              <label className="form-check-label" htmlFor="powerOutlet">{t('common.powerOutlet')}</label>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <label htmlFor="departureTime" className="form-label">{t('common.departureTime')}:</label>
+            <select
+              id="departureTime"
+              className="form-select"
+              value={departureTime}
+              onChange={(e) => setDepartureTime(e.target.value)}
+            >
+              <option value="All">{t('common.allDay')}</option>
+              <option value="0-6">{t('common.earlyMorning')} (12am - 6am)</option>
+              <option value="6-12">{t('common.morning')} (6am - 12pm)</option>
+              <option value="12-18">{t('common.afternoon')} (12pm - 6pm)</option>
+              <option value="18-24">{t('common.evening')} (6pm - 12am)</option>
+            </select>
           </div>
         </div>
       </div>
