@@ -18,8 +18,8 @@ const BookingPage = () => {
   const [trip, setTrip] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [passengerName, setPassengerName] = useState('');
-  const [passengerEmail, setPassengerEmail] = useState('');
+  const [passengerName, setPassengerName] = useState(user ? user.name : '');
+  const [passengerEmail, setPassengerEmail] = useState(user ? user.email : '');
   const [numberOfPassengers, setNumberOfPassengers] = useState(1);
   const [promoCode, setPromoCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
@@ -98,25 +98,19 @@ const BookingPage = () => {
     }
 
     try {
-      const response = await createBooking(trip.id, selectedSeats);
-      if (response.message === "Booking created successfully") {
-        toast.success(t('common.bookingSuccessful'));
-        const bookingDetails = {
-          ...response.booking,
-          from: trip.from,
-          to: trip.to,
-          date: trip.date,
-          departureTime: trip.departureTime,
-          price: calculateTotalPrice(),
-          passengerName: user ? user.name : passengerName,
-          passengerEmail: user ? user.email : passengerEmail,
-          numberOfPassengers: numberOfPassengers,
-          selectedSeats: selectedSeats
-        };
-        navigate('/booking-confirmation', { state: { bookingDetails } });
-      } else {
-        toast.error(response.error || t('common.bookingFailed'));
-      }
+      const bookingDetails = {
+        tripId: trip.id,
+        from: trip.from,
+        to: trip.to,
+        date: trip.date,
+        departureTime: trip.departureTime,
+        price: calculateTotalPrice(),
+        passengerName: user ? user.name : passengerName,
+        passengerEmail: user ? user.email : passengerEmail,
+        numberOfPassengers: numberOfPassengers,
+        selectedSeats: selectedSeats,
+      };
+      navigate('/payment', { state: { bookingDetails } });
     } catch (error) {
       console.error("Booking failed:", error);
       toast.error(t('common.bookingFailed'));
