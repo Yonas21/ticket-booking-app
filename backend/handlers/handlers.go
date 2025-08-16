@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -103,6 +104,7 @@ func SearchTripsHandler(w http.ResponseWriter, r *http.Request) {
 
 	trips, err := database.SearchTrips(from, to, date, flexibleDateRange)
 	if err != nil {
+		log.Printf("Error searching trips: %v", err)
 		http.Error(w, "Failed to search trips", http.StatusInternalServerError)
 		return
 	}
