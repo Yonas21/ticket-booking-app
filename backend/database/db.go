@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -72,8 +73,8 @@ func GetUserByEmail(email string) (models.User, error) {
 func GetTripByID(id int) (models.Trip, error) {
 	var trip models.Trip
 	var seats pq.StringArray
-	row := DB.QueryRow(`SELECT id, "from", "to", date, "time", price, seats, seats_available FROM trips WHERE id = $1`, id)
-	err := row.Scan(&trip.ID, &trip.From, &trip.To, &trip.Date, &trip.Time, &trip.Price, &seats, &trip.SeatsAvailable)
+	row := DB.QueryRow(`SELECT id, "from", "to", date, "departure_time", "arrival_time", price, seats, seats_available FROM trips WHERE id = $1`, id)
+	err := row.Scan(&trip.ID, &trip.From, &trip.To, &trip.Date, &trip.DepartureTime, &trip.ArrivalTime, &trip.Price, &seats, &trip.SeatsAvailable)
 	if err != nil {
 		return trip, err
 	}
@@ -81,14 +82,20 @@ func GetTripByID(id int) (models.Trip, error) {
 	return trip, nil
 }
 
+
 func SearchTrips(from, to, date string, flexibleDateRange int) ([]models.Trip, error) {
 	var trips []models.Trip
-	query := `SELECT id, "from", "to", date, "time", price, seats, seats_available FROM trips WHERE LOWER("from") = LOWER($1) AND LOWER("to") = LOWER($2)`
+	query := `SELECT id, "from", "to", date, departure_time, arrival_time, price, seats_available, bus_operator, duration, amenities, intermediate_stops, reviews, seats FROM trips WHERE LOWER("from") = LOWER($1) AND LOWER("to") = LOWER($2)`
 	args := []interface{}{from, to}
 
 	if date != "" {
-		query += ` AND date::date = $3::date`
-		args = append(args, date)
+		if flexibleDateRange > 0 {
+			query += ` AND date::date BETWEEN $3::date - $4 * interval '1 day' AND $3::date + $4 * interval '1 day'`
+			args = append(args, date, flexibleDateRange)
+		} else {
+			query += ` AND date::date = $3::date`
+			args = append(args, date)
+		}
 	}
 
 	rows, err := DB.Query(query, args...)
@@ -99,29 +106,35 @@ func SearchTrips(from, to, date string, flexibleDateRange int) ([]models.Trip, e
 
 	for rows.Next() {
 		var trip models.Trip
-		var seats pq.StringArray
-		err := rows.Scan(&trip.ID, &trip.From, &trip.To, &trip.Date, &trip.Time, &trip.Price, &seats, &trip.SeatsAvailable)
+		var amenities, intermediateStops, seats pq.StringArray
+		var reviewsJSON []byte
+		err := rows.Scan(&trip.ID, &trip.From, &trip.To, &trip.Date, &trip.DepartureTime, &trip.ArrivalTime, &trip.Price, &trip.SeatsAvailable, &trip.BusOperator, &trip.Duration, &amenities, &intermediateStops, &reviewsJSON, &seats)
 		if err != nil {
 			return nil, err
 		}
+		trip.Amenities = []string(amenities)
+		trip.IntermediateStops = []string(intermediateStops)
 		trip.Seats = []string(seats)
+		json.Unmarshal(reviewsJSON, &trip.Reviews)
 		trips = append(trips, trip)
 	}
 
 	return trips, nil
 }
 
+
 func CreateTrip(trip models.Trip) (models.Trip, error) {
 	var id int
 	var seats pq.StringArray = trip.Seats
-	err := DB.QueryRow("INSERT INTO trips (\"from\", \"to\", date, \"time\", price, seats, seats_available) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id",
-		trip.From, trip.To, trip.Date, trip.Time, trip.Price, pq.Array(seats), trip.SeatsAvailable).Scan(&id)
+	err := DB.QueryRow("INSERT INTO trips (\"from\", \"to\", date, \"departure_time\", \"arrival_time\", price, seats, seats_available) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id",
+		trip.From, trip.To, trip.Date, trip.DepartureTime, trip.ArrivalTime, trip.Price, pq.Array(seats), trip.SeatsAvailable).Scan(&id)
 	if err != nil {
 		return trip, err
 	}
 	trip.ID = id
 	return trip, nil
 }
+
 
 
 func CreateBooking(booking models.Booking) (int, error) {
