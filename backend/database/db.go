@@ -19,7 +19,30 @@ func InitDB() {
 	if dbName == "" {
 		dbName = "ticket_booking"
 	}
-	connStr := fmt.Sprintf("dbname=%s sslmode=disable", dbName)
+
+	user := os.Getenv("DB_USER")
+	if user == "" {
+		user = "yoni"
+	}
+
+	password := os.Getenv("DB_PASSWORD")
+	// Default password if not set
+	if password == "" {
+		password = "password"
+	}
+
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		host = "localhost"
+	}
+
+	port := os.Getenv("DB_PORT")
+	if port == "" {
+		port = "5432"
+	}
+
+	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbName)
 
 	var err error
 	DB, err = sql.Open("postgres", connStr)
@@ -36,7 +59,25 @@ func InitDB() {
 }
 
 func ConnectToPostgres(dbName string) (*sql.DB, error) {
-	connStr := fmt.Sprintf("dbname=%s sslmode=disable", dbName)
+	user := os.Getenv("DB_USER")
+	if user == "" {
+		user = "yoni"
+	}
+
+	password := os.Getenv("DB_PASSWORD")
+
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		host = "localhost"
+	}
+
+	port := os.Getenv("DB_PORT")
+	if port == "" {
+		port = "5432"
+	}
+
+	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbName)
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err
@@ -78,7 +119,11 @@ func GetTripByID(id int) (models.Trip, error) {
 	if err != nil {
 		return trip, err
 	}
-	trip.Seats = []string(seats)
+	if seats == nil { // Check if the pq.StringArray is nil
+		trip.Seats = []string{} // Initialize to an empty slice
+	} else {
+		trip.Seats = []string(seats)
+	}
 	return trip, nil
 }
 

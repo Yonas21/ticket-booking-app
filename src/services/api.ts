@@ -43,16 +43,19 @@ export const getTripById = async (id, currency = 'ETB') => {
     const simulatedTrip = { ...trip };
     const seatsToTake = Math.floor(Math.random() * 5); // Take up to 5 random seats
     const takenSeats = [];
-    const availableSeats = [...simulatedTrip.seats]; // Start with all seats from the original trip
+    const allSeats = [...trip.seats]; // Start with all seats from the original trip
 
     for (let i = 0; i < seatsToTake; i++) {
-      if (availableSeats.length > 0) {
-        const randomIndex = Math.floor(Math.random() * availableSeats.length);
-        takenSeats.push(availableSeats.splice(randomIndex, 1)[0]);
+      if (allSeats.length > 0) {
+        const randomIndex = Math.floor(Math.random() * allSeats.length);
+        takenSeats.push(allSeats.splice(randomIndex, 1)[0]);
       }
     }
+    // The available seats are the ones not in takenSeats
+    const availableSeats = trip.seats.filter(seat => !takenSeats.includes(seat));
+
     simulatedTrip.seatsAvailable = availableSeats.length;
-    simulatedTrip.seats = availableSeats; // Update the seats array to only include available ones
+    simulatedTrip.seats = trip.seats; // All seats for rendering the layout
     simulatedTrip.takenSeats = takenSeats; // Store taken seats separately
 
     // Convert price to target currency

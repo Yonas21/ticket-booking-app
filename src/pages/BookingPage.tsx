@@ -27,6 +27,19 @@ const BookingPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const formatDateTime = (dateTimeString, type) => {
+    if (!dateTimeString) return '';
+    const date = new Date(dateTimeString);
+    if (isNaN(date.getTime())) return dateTimeString; // Return original if invalid date
+
+    if (type === 'date') {
+      return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+    } else if (type === 'time') {
+      return date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', hour12: true });
+    }
+    return dateTimeString;
+  };
+
   const getCurrencySymbol = (currencyCode) => {
     switch (currencyCode) {
       case 'USD': return '$';
@@ -42,6 +55,8 @@ const BookingPage = () => {
       // Pass currency to getTripById
       const fetchedTrip = await getTripById(id, currency);
       setTrip(fetchedTrip);
+      console.log("Trip seats:", fetchedTrip.seats);
+      console.log("Taken seats:", fetchedTrip.takenSeats);
       setLoading(false);
     };
     fetchTrip();
@@ -136,9 +151,9 @@ const BookingPage = () => {
       <div className="card mb-4">
         <div className="card-body">
           <h5 className="card-title">{t('common.tripDetails')}</h5>
-          <p><strong>{t('common.date')}:</strong> {trip.date}</p>
-          <p><strong>{t('common.departure')}:</strong> {trip.departureTime} {t('common.from')} {trip.from}</p>
-          <p><strong>{t('common.arrival')}:</strong> {trip.arrivalTime} {t('common.to')} {trip.to}</p>
+          <p><strong>{t('common.date')}:</strong> {formatDateTime(trip.date, 'date')}</p>
+          <p><strong>{t('common.departure')}:</strong> {formatDateTime(trip.departureTime, 'time')} {t('common.from')} {trip.from}</p>
+          <p><strong>{t('common.arrival')}:</strong> {formatDateTime(trip.arrivalTime, 'time')} {t('common.to')} {trip.to}</p>
           <p><strong>{t('common.busOperator')}:</strong> {trip.busOperator}</p>
           <p><strong>{t('common.duration')}:</strong> {trip.duration}</p>
           <p><strong>{t('common.basePrice')}:</strong> {getCurrencySymbol(currency)}{trip.originalPriceUSD * numberOfPassengers}</p>

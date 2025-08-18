@@ -52,8 +52,8 @@ func main() {
             continue
         }
 
-        _, err = db.Exec(`INSERT INTO trips ("from", "to", date, departure_time, arrival_time, price, seats_available, bus_operator, duration, amenities, intermediate_stops, reviews) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
-            trip.From, trip.To, trip.Date, trip.DepartureTime, trip.ArrivalTime, trip.Price, trip.SeatsAvailable, trip.BusOperator, trip.Duration, pq.Array(trip.Amenities), pq.Array(trip.IntermediateStops), reviewsJSON)
+        _, err = db.Exec(`INSERT INTO trips ("from", "to", date, departure_time, arrival_time, price, seats_available, bus_operator, duration, amenities, intermediate_stops, reviews, seats) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+            trip.From, trip.To, trip.Date, trip.DepartureTime, trip.ArrivalTime, trip.Price, trip.SeatsAvailable, trip.BusOperator, trip.Duration, pq.Array(trip.Amenities), pq.Array(trip.IntermediateStops), reviewsJSON, pq.Array(trip.Seats))
         if err != nil {
             log.Printf("Failed to insert trip: %v", err)
         }

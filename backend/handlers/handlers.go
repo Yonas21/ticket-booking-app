@@ -11,6 +11,7 @@ import (
 	"ticket-booking-app/backend/config"
 	"ticket-booking-app/backend/database"
 	"ticket-booking-app/backend/models"
+	"ticket-booking-app/backend/email"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
@@ -169,6 +170,9 @@ func CreateBookingHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	booking.ID = bookingID
+
+	// Send booking confirmation email
+	email.SendBookingConfirmationEmail(user.Email, booking, trip)
 
 	// Update trip seats
 	trip, err := database.GetTripByID(booking.TripID)
