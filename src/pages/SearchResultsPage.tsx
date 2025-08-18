@@ -17,6 +17,19 @@ const SearchResultsPage = () => {
   const [sortBy, setSortBy] = useState('priceAsc'); // priceAsc, priceDesc, departureAsc, departureDesc, durationAsc, durationDesc
   const { t } = useTranslation();
 
+  const formatDateForDisplay = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return dateString; // Return original if invalid
+    }
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(date);
+  };
+
   const from = searchParams.get('from');
   const to = searchParams.get('to');
   const departureDate = searchParams.get('departureDate');
@@ -92,7 +105,7 @@ const SearchResultsPage = () => {
     <div className="container slick-design">
       <h2 className="mb-4">{t('common.availableTripsFromTo', { from: from, to: to })}</h2>
       {flexibleDateRange && (
-        <p className="alert alert-info">{t('common.showingResultsFor', { range: flexibleDateRange, date: departureDate })}</p>
+        <p className="alert alert-info">{t('common.showingResultsFor', { range: flexibleDateRange, date: formatDateForDisplay(departureDate) })}</p>
       )}
 
       <div className="card mb-4 p-3 shadow-sm">

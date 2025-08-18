@@ -5,6 +5,8 @@ import { getTripById, createBooking } from '../services/api';
 import SeatSelection from '../components/SeatSelection';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { formatDateTime } from '../data/date';
+import { getCurrencySymbol } from '../data/currency';
 
 // Mock promo codes
 const mockPromoCodes = [
@@ -27,27 +29,6 @@ const BookingPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const formatDateTime = (dateTimeString, type) => {
-    if (!dateTimeString) return '';
-    const date = new Date(dateTimeString);
-    if (isNaN(date.getTime())) return dateTimeString; // Return original if invalid date
-
-    if (type === 'date') {
-      return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-    } else if (type === 'time') {
-      return date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', hour12: true });
-    }
-    return dateTimeString;
-  };
-
-  const getCurrencySymbol = (currencyCode) => {
-    switch (currencyCode) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'GBP': return '£';
-      default: return '$';
-    }
-  };
 
   useEffect(() => {
     const fetchTrip = async () => {

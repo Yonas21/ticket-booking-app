@@ -171,15 +171,14 @@ func CreateBookingHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	booking.ID = bookingID
 
-	// Send booking confirmation email
-	email.SendBookingConfirmationEmail(user.Email, booking, trip)
-
 	// Update trip seats
 	trip, err := database.GetTripByID(booking.TripID)
 	if err != nil {
 		http.Error(w, "Trip not found for seat update", http.StatusInternalServerError)
 		return
 	}
+	// Send booking confirmation email
+	email.SendBookingConfirmationEmail(user.Email, booking, trip)
 
 	var newSeats []string
 	for _, seat := range trip.Seats {

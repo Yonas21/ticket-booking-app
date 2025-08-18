@@ -2,20 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 import { useTranslation } from 'react-i18next';
+import { getCurrencySymbol } from '../data/currency';
 
 const BusCard = ({ trip }) => {
   const { currency } = useAuthStore();
   const { t } = useTranslation();
 
-  const getCurrencySymbol = (currencyCode) => {
-    switch (currencyCode) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'GBP': return '£';
-      case 'ETB': return t('common.currencySymbolETB');
-      default: return '$';
-    }
-  };
 
   return (
     <div className="card mb-3 shadow-sm slick-design">

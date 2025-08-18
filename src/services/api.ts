@@ -19,6 +19,10 @@ export const searchTrips = async (from, to, date, flexibleDateRange, currency = 
   const results = await response.json();
 
   // Simulate dynamic pricing: adjust price slightly and convert to target currency
+  if (!Array.isArray(results)) {
+    console.warn("API returned non-array for searchTrips:", results);
+    return []; // Return an empty array to prevent .map error
+  }
   return results.map(trip => {
     const priceUSD = parseFloat((trip.price * (1 + (Math.random() * 0.2 - 0.1))).toFixed(2));
     return {
