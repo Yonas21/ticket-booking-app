@@ -14,6 +14,7 @@ import ContactPage from './pages/ContactPage';
 import BookingConfirmationPage from './pages/BookingConfirmationPage';
 import SupportPage from './pages/SupportPage';
 import PaymentPage from './pages/PaymentPage';
+import BusTrackingPage from './pages/BusTrackingPage';
 import ErrorBoundary from './components/ErrorBoundary';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -59,6 +60,7 @@ function App() {
               <Route path="booking-confirmation" element={<BookingConfirmationPage />} />
               <Route path="support" element={<SupportPage />} />
               <Route path="payment" element={<PaymentPage />} />
+              <Route path="track-bus/:id" element={<BusTrackingPage />} />
             </Route>
           </Routes>
         </ErrorBoundary>

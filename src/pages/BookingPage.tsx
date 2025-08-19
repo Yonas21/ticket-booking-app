@@ -88,12 +88,13 @@ const BookingPage = () => {
       return;
     }
 
-    if (!user) {
-      toast.error(t('common.loginRequired'));
+    if (!user && (!passengerName || !passengerEmail)) {
+      toast.error(t('common.enterGuestDetails'));
       return;
     }
 
     try {
+      const bookingResponse = await createBooking(trip.id, selectedSeats, user ? user.name : passengerName, user ? user.email : passengerEmail);
       const bookingDetails = {
         tripId: trip.id,
         from: trip.from,
@@ -105,11 +106,12 @@ const BookingPage = () => {
         passengerEmail: user ? user.email : passengerEmail,
         numberOfPassengers: numberOfPassengers,
         selectedSeats: selectedSeats,
+        id: bookingResponse.booking.ID, // Assuming the backend returns the booking ID
       };
       navigate('/payment', { state: { bookingDetails } });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Booking failed:", error);
-      toast.error(t('common.bookingFailed'));
+      toast.error(error.message || t('common.bookingFailed'));
     }
   };
 

@@ -77,6 +77,7 @@ const BookingConfirmationPage = () => {
           <div className="text-center mt-4">
             <button className="btn btn-outline-primary me-2" onClick={() => window.print()}>{t('common.printTicket')}</button>
             <button className="btn btn-outline-primary me-2">{t('common.emailTicket')}</button>
+            <Link to={`/track-bus/${bookingDetails.tripId}`} className="btn btn-info me-2">{t('common.trackBus')}</Link>
             <Link to="/profile" className="btn btn-primary">{t('common.viewMyBookings')}</Link>
           </div>
         </div>

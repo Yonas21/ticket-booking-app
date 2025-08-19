@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 import { useTranslation } from 'react-i18next';
 import { getCurrencySymbol } from '../data/currency';
+import { formatDateTime } from '../data/date';
 
 const BusCard = ({ trip }) => {
   const { currency } = useAuthStore();
@@ -11,6 +12,9 @@ const BusCard = ({ trip }) => {
 
   return (
     <div className="card mb-3 shadow-sm slick-design">
+      {trip.busImage && (
+        <img src={trip.busImage} className="card-img-top" alt={`${trip.busOperator} bus`} style={{ height: '180px', objectFit: 'cover' }} />
+      )}
       <div className="card-body">
         <div className="row align-items-center">
           <div className="col-md-2 col-sm-12 text-center text-md-start mb-2 mb-md-0">
@@ -20,7 +24,7 @@ const BusCard = ({ trip }) => {
           <div className="col-md-7 col-sm-12">
             <div className="d-flex justify-content-between align-items-center flex-wrap">
               <div className="text-center flex-grow-1 mb-2 mb-sm-0">
-                <p className="mb-0 fw-bold">{trip.departureTime}</p>
+                <p className="mb-0 fw-bold">{formatDateTime(trip.departureTime, "date")}</p>
                 <p className="mb-0 text-muted">{trip.from}</p>
               </div>
               <div className="text-center flex-grow-1 mb-2 mb-sm-0">
@@ -31,8 +35,8 @@ const BusCard = ({ trip }) => {
                 <p className="mb-0 text-muted"><small>{trip.stops} {t('common.stops')}</small></p>
               </div>
               <div className="text-center flex-grow-1">
-                <p className="mb-0 fw-bold">{trip.arrivalTime}</p>
-                <p className="mb-0 text-muted">{trip.to}</p>
+                <p className="mb-0 fw-bold">{formatDateTime(trip.arrivalTime, "date")}</p>
+                <p className="mb-0 text-muted">{formatDateTime(trip.to, "date")}</p>
               </div>
             </div>
           </div>

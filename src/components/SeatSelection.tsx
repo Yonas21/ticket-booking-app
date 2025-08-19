@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import './SeatSelection.css';
 
 const SeatSelection = ({ seats, selectedSeats, onSelectSeat, takenSeats = [] }) => {
   const { t } = useTranslation();
@@ -23,30 +24,31 @@ const SeatSelection = ({ seats, selectedSeats, onSelectSeat, takenSeats = [] }) 
     const isSelected = selectedSeats.includes(seat);
     const isTaken = takenSeats.includes(seat);
 
-    let seatClass = 'btn-outline-primary';
+    let seatClass = 'available';
     let ariaLabel = t('common.seatAvailable', { seat });
     let isDisabled = false;
 
     if (isSelected) {
-      seatClass = 'btn-primary active';
+      seatClass = 'selected';
       ariaLabel = t('common.seatSelected', { seat });
     } else if (isTaken) {
-      seatClass = 'btn-secondary disabled';
+      seatClass = 'taken';
       ariaLabel = t('common.seatUnavailable', { seat });
       isDisabled = true;
     }
 
     return (
-      <button
+      <div
         key={seat}
-        className={`btn m-1 ${seatClass}`}
-        onClick={() => onSelectSeat(seat)}
+        className={`seat ${seatClass}`}
+        onClick={() => !isDisabled && onSelectSeat(seat)}
         aria-pressed={isSelected}
-        disabled={isDisabled}
+        role="button"
+        tabIndex={isDisabled ? -1 : 0}
         title={ariaLabel}
       >
         {seat}
-      </button>
+      </div>
     );
   };
 
@@ -54,6 +56,20 @@ const SeatSelection = ({ seats, selectedSeats, onSelectSeat, takenSeats = [] }) 
     <div className="bus-layout mb-4">
       <div className="driver-cabin">{t('common.driver')}</div>
       {renderSeats()}
+      <div className="legend">
+        <div className="legend-item">
+          <div className="legend-color available"></div>
+          <span>{t('common.available')}</span>
+        </div>
+        <div className="legend-item">
+          <div className="legend-color selected"></div>
+          <span>{t('common.selected')}</span>
+        </div>
+        <div className="legend-item">
+          <div className="legend-color taken"></div>
+          <span>{t('common.taken')}</span>
+        </div>
+      </div>
     </div>
   );
 };
