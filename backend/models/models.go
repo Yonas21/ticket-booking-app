@@ -22,6 +22,7 @@ type Trip struct {
 	Amenities         []string `json:"amenities"`
 	IntermediateStops []string `json:"intermediateStops"`
 	Reviews           []Review `json:"reviews"`
+	BusImage          string   `json:"busImage"`
 }
 
 type User struct {
@@ -36,4 +37,12 @@ type Booking struct {
     UserID int      `json:"userId"`
     TripID int      `json:"trip_id"`
     Seats  []string `json:"seats"`
+    PassengerName  string `json:"passengerName"`
+    PassengerEmail string `json:"passengerEmail"`
+}
+
+type BusLocation struct {
+    ID  int     `json:"id"`
+    Lat float64 `json:"lat"`
+    Lng float64 `json:"lng"`
 }

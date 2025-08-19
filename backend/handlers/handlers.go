@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"log"
+	"math/rand"
 	"net/http"
 	"strconv"
 	"time"
@@ -155,15 +156,24 @@ func CreateBookingHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Get user from token
-	claims := r.Context().Value("claims").(*jwt.StandardClaims)
-	user, err := database.GetUserByEmail(claims.Subject)
-	if err != nil {
-		http.Error(w, "User not found", http.StatusUnauthorized)
-		return
+	// Check for Authorization header
+	authHeader := r.Header.Get("Authorization")
+	if authHeader != "" {
+		// User is likely logged in, extract user ID from token
+		claims := r.Context().Value("claims").(*jwt.StandardClaims)
+		user, err := database.GetUserByEmail(claims.Subject)
+		if err != nil {
+			http.Error(w, "User not found", http.StatusUnauthorized)
+			return
+		}
+		booking.UserID = user.ID
+		booking.PassengerEmail = user.Email
+		booking.PassengerName = user.Name
+	} else {
+		// Guest user
+		booking.UserID = 0 // Or whatever your DB schema uses for guest users
 	}
 
-	booking.UserID = user.ID
 	bookingID, err := database.CreateBooking(booking)
 	if err != nil {
 		http.Error(w, "Failed to create booking", http.StatusInternalServerError)
@@ -178,7 +188,7 @@ func CreateBookingHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Send booking confirmation email
-	email.SendBookingConfirmationEmail(user.Email, booking, trip)
+	email.SendBookingConfirmationEmail(booking.PassengerEmail, booking, trip)
 
 	var newSeats []string
 	for _, seat := range trip.Seats {
@@ -196,7 +206,12 @@ func CreateBookingHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = database.UpdateTripSeats(trip.ID, newSeats, trip.SeatsAvailable-len(booking.Seats))
 	if err != nil {
-		http.Error(w, "Failed to update trip seats", http.StatusInternalServerError)
+		log.Printf("Error updating trip seats: %v", err)
+		if err.Error() == "seats no longer available or trip ID invalid" {
+			http.Error(w, "The selected seats are no longer available. Please refresh and try again.", http.StatusConflict)
+		} else {
+			http.Error(w, "Failed to update trip seats", http.StatusInternalServerError)
+		}
 		return
 	}
 
@@ -230,3 +245,40 @@ func GetProfileHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
+
+var mockBusLocations = []models.BusLocation{
+	{ID: 1, Lat: 34.052235, Lng: -118.243683},
+	{ID: 2, Lat: 36.169941, Lng: -115.139832},
+}
+
+func GetBusLocationHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, "Invalid bus ID", http.StatusBadRequest)
+		return
+	}
+
+	var location models.BusLocation
+	for _, l := range mockBusLocations {
+		if l.ID == id {
+			location = l
+			break
+		}
+	}
+
+	if location.ID == 0 {
+		http.NotFound(w, r)
+		return
+	}
+
+	// Simulate bus movement
+	location.Lat += (rand.Float64() - 0.5) * 0.01
+	location.Lng += (rand.Float64() - 0.5) * 0.01
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(location)
+}
+
+
+
