@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import useAuthStore from '../store/authStore';
+import { getCurrencySymbol } from '../data/currency';
 
 const PaymentPage = () => {
   const { state } = useLocation();
@@ -11,15 +12,6 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const { currency } = useAuthStore();
 
-  const getCurrencySymbol = (currencyCode) => {
-    switch (currencyCode) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'GBP': return '£';
-      case 'ETB': return t('common.currencySymbolETB');
-      default: return '';
-    }
-  };
 
   const [paymentMethod, setPaymentMethod] = useState('creditCard');
   const [cardDetails, setCardDetails] = useState({

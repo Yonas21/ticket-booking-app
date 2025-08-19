@@ -26,7 +26,8 @@ func main() {
 	r.HandleFunc("/api/auth/login", handlers.LoginHandler).Methods("POST")
 	r.HandleFunc("/api/trips/search", handlers.SearchTripsHandler).Methods("GET")
 	r.Handle("/api/trips/{id}", auth.Middleware(http.HandlerFunc(handlers.GetTripByIDHandler))).Methods("GET")
-	r.Handle("/api/bookings", auth.Middleware(http.HandlerFunc(handlers.CreateBookingHandler))).Methods("POST")
+	r.HandleFunc("/api/trips/{id}/location", handlers.GetBusLocationHandler).Methods("GET")
+	r.HandleFunc("/api/bookings", handlers.CreateBookingHandler).Methods("POST")
 	r.Handle("/api/profile", auth.Middleware(http.HandlerFunc(handlers.GetProfileHandler))).Methods("GET")
 
 	// CORS handler

@@ -3,6 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { useTranslation } from 'react-i18next';
 import useAuthStore from '../store/authStore';
+import { getCurrencySymbol } from '../data/currency';
 
 const BookingConfirmationPage = () => {
   const { currency } = useAuthStore();
@@ -10,15 +11,6 @@ const BookingConfirmationPage = () => {
   const { bookingDetails } = location.state || {};
   const { t } = useTranslation();
 
-  const getCurrencySymbol = (currencyCode) => {
-    switch (currencyCode) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'GBP': return '£';
-      case 'ETB': return t('common.currencySymbolETB');
-      default: return '$';
-    }
-  };
 
   if (!bookingDetails) {
     return (
@@ -85,6 +77,7 @@ const BookingConfirmationPage = () => {
           <div className="text-center mt-4">
             <button className="btn btn-outline-primary me-2" onClick={() => window.print()}>{t('common.printTicket')}</button>
             <button className="btn btn-outline-primary me-2">{t('common.emailTicket')}</button>
+            <Link to={`/track-bus/${bookingDetails.tripId}`} className="btn btn-info me-2">{t('common.trackBus')}</Link>
             <Link to="/profile" className="btn btn-primary">{t('common.viewMyBookings')}</Link>
           </div>
         </div>

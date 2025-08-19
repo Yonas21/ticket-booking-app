@@ -19,7 +19,30 @@ func InitDB() {
 	if dbName == "" {
 		dbName = "ticket_booking"
 	}
-	connStr := fmt.Sprintf("dbname=%s sslmode=disable", dbName)
+
+	user := os.Getenv("DB_USER")
+	if user == "" {
+		user = "yoni"
+	}
+
+	password := os.Getenv("DB_PASSWORD")
+	// Default password if not set
+	if password == "" {
+		password = "password"
+	}
+
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		host = "localhost"
+	}
+
+	port := os.Getenv("DB_PORT")
+	if port == "" {
+		port = "5432"
+	}
+
+	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbName)
 
 	var err error
 	DB, err = sql.Open("postgres", connStr)
@@ -36,7 +59,25 @@ func InitDB() {
 }
 
 func ConnectToPostgres(dbName string) (*sql.DB, error) {
-	connStr := fmt.Sprintf("dbname=%s sslmode=disable", dbName)
+	user := os.Getenv("DB_USER")
+	if user == "" {
+		user = "yoni"
+	}
+
+	password := os.Getenv("DB_PASSWORD")
+
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		host = "localhost"
+	}
+
+	port := os.Getenv("DB_PORT")
+	if port == "" {
+		port = "5432"
+	}
+
+	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbName)
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err
@@ -73,19 +114,23 @@ func GetUserByEmail(email string) (models.User, error) {
 func GetTripByID(id int) (models.Trip, error) {
 	var trip models.Trip
 	var seats pq.StringArray
-	row := DB.QueryRow(`SELECT id, "from", "to", date, "departure_time", "arrival_time", price, seats, seats_available FROM trips WHERE id = $1`, id)
-	err := row.Scan(&trip.ID, &trip.From, &trip.To, &trip.Date, &trip.DepartureTime, &trip.ArrivalTime, &trip.Price, &seats, &trip.SeatsAvailable)
+	row := DB.QueryRow(`SELECT id, "from", "to", date, "departure_time", "arrival_time", price, seats, seats_available, bus_image FROM trips WHERE id = $1`, id)
+	err := row.Scan(&trip.ID, &trip.From, &trip.To, &trip.Date, &trip.DepartureTime, &trip.ArrivalTime, &trip.Price, &seats, &trip.SeatsAvailable, &trip.BusImage)
 	if err != nil {
 		return trip, err
 	}
-	trip.Seats = []string(seats)
+	if seats == nil { // Check if the pq.StringArray is nil
+		trip.Seats = []string{} // Initialize to an empty slice
+	} else {
+		trip.Seats = []string(seats)
+	}
 	return trip, nil
 }
 
 
 func SearchTrips(from, to, date string, flexibleDateRange int) ([]models.Trip, error) {
 	var trips []models.Trip
-	query := `SELECT id, "from", "to", date, departure_time, arrival_time, price, seats_available, bus_operator, duration, amenities, intermediate_stops, reviews, seats FROM trips WHERE LOWER("from") = LOWER($1) AND LOWER("to") = LOWER($2)`
+	query := `SELECT id, "from", "to", date, departure_time, arrival_time, price, seats_available, bus_operator, duration, amenities, intermediate_stops, reviews, seats, bus_image FROM trips WHERE "from" = $1 AND "to" = $2`
 	args := []interface{}{from, to}
 
 	if date != "" {
@@ -108,7 +153,7 @@ func SearchTrips(from, to, date string, flexibleDateRange int) ([]models.Trip, e
 		var trip models.Trip
 		var amenities, intermediateStops, seats pq.StringArray
 		var reviewsJSON []byte
-		err := rows.Scan(&trip.ID, &trip.From, &trip.To, &trip.Date, &trip.DepartureTime, &trip.ArrivalTime, &trip.Price, &trip.SeatsAvailable, &trip.BusOperator, &trip.Duration, &amenities, &intermediateStops, &reviewsJSON, &seats)
+		err := rows.Scan(&trip.ID, &trip.From, &trip.To, &trip.Date, &trip.DepartureTime, &trip.ArrivalTime, &trip.Price, &trip.SeatsAvailable, &trip.BusOperator, &trip.Duration, &amenities, &intermediateStops, &reviewsJSON, &seats, &trip.BusImage)
 		if err != nil {
 			return nil, err
 		}
@@ -139,8 +184,8 @@ func CreateTrip(trip models.Trip) (models.Trip, error) {
 
 func CreateBooking(booking models.Booking) (int, error) {
 	var id int
-	err := DB.QueryRow("INSERT INTO bookings (user_id, trip_id, seats) VALUES ($1, $2, $3) RETURNING id",
-		booking.UserID, booking.TripID, pq.Array(booking.Seats)).Scan(&id)
+	err := DB.QueryRow("INSERT INTO bookings (user_id, trip_id, seats, passenger_name, passenger_email) VALUES ($1, $2, $3, $4, $5) RETURNING id",
+		booking.UserID, booking.TripID, pq.Array(booking.Seats), booking.PassengerName, booking.PassengerEmail).Scan(&id)
 	if err != nil {
 		return 0, err
 	}
@@ -148,9 +193,22 @@ func CreateBooking(booking models.Booking) (int, error) {
 }
 
 func UpdateTripSeats(tripID int, newSeats []string, seatsAvailable int) error {
-	_, err := DB.Exec("UPDATE trips SET seats = $1, seats_available = $2 WHERE id = $3",
+	result, err := DB.Exec("UPDATE trips SET seats = $1, seats_available = $2 WHERE id = $3",
 		pq.Array(newSeats), seatsAvailable, tripID)
-	return err
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("seats no longer available or trip ID invalid")
+	}
+
+	return nil
 }
 
 func GetUserProfile(email string) (models.User, []models.Booking, error) {

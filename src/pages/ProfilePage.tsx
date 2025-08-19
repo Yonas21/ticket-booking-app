@@ -5,6 +5,7 @@ import { getProfile } from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { getCurrencySymbol } from '../data/currency';
 
 const ProfilePage = () => {
   const { user, setUser, currency } = useAuthStore();
@@ -15,15 +16,6 @@ const ProfilePage = () => {
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const getCurrencySymbol = (currencyCode) => {
-    switch (currencyCode) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'GBP': return '£';
-      case 'ETB': return 'ETB';
-      default: return '$';
-    }
-  };
 
   useEffect(() => {
     const fetchProfile = async () => {

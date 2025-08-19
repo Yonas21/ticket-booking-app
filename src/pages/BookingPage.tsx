@@ -5,6 +5,8 @@ import { getTripById, createBooking } from '../services/api';
 import SeatSelection from '../components/SeatSelection';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { formatDateTime } from '../data/date';
+import { getCurrencySymbol } from '../data/currency';
 
 // Mock promo codes
 const mockPromoCodes = [
@@ -27,14 +29,6 @@ const BookingPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const getCurrencySymbol = (currencyCode) => {
-    switch (currencyCode) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'GBP': return '£';
-      default: return '$';
-    }
-  };
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -42,6 +36,8 @@ const BookingPage = () => {
       // Pass currency to getTripById
       const fetchedTrip = await getTripById(id, currency);
       setTrip(fetchedTrip);
+      console.log("Trip seats:", fetchedTrip.seats);
+      console.log("Taken seats:", fetchedTrip.takenSeats);
       setLoading(false);
     };
     fetchTrip();
@@ -92,12 +88,13 @@ const BookingPage = () => {
       return;
     }
 
-    if (!user) {
-      toast.error(t('common.loginRequired'));
+    if (!user && (!passengerName || !passengerEmail)) {
+      toast.error(t('common.enterGuestDetails'));
       return;
     }
 
     try {
+      const bookingResponse = await createBooking(trip.id, selectedSeats, user ? user.name : passengerName, user ? user.email : passengerEmail);
       const bookingDetails = {
         tripId: trip.id,
         from: trip.from,
@@ -109,11 +106,12 @@ const BookingPage = () => {
         passengerEmail: user ? user.email : passengerEmail,
         numberOfPassengers: numberOfPassengers,
         selectedSeats: selectedSeats,
+        id: bookingResponse.booking.ID, // Assuming the backend returns the booking ID
       };
       navigate('/payment', { state: { bookingDetails } });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Booking failed:", error);
-      toast.error(t('common.bookingFailed'));
+      toast.error(error.message || t('common.bookingFailed'));
     }
   };
 
@@ -136,9 +134,9 @@ const BookingPage = () => {
       <div className="card mb-4">
         <div className="card-body">
           <h5 className="card-title">{t('common.tripDetails')}</h5>
-          <p><strong>{t('common.date')}:</strong> {trip.date}</p>
-          <p><strong>{t('common.departure')}:</strong> {trip.departureTime} {t('common.from')} {trip.from}</p>
-          <p><strong>{t('common.arrival')}:</strong> {trip.arrivalTime} {t('common.to')} {trip.to}</p>
+          <p><strong>{t('common.date')}:</strong> {formatDateTime(trip.date, 'date')}</p>
+          <p><strong>{t('common.departure')}:</strong> {formatDateTime(trip.departureTime, 'time')} {t('common.from')} {trip.from}</p>
+          <p><strong>{t('common.arrival')}:</strong> {formatDateTime(trip.arrivalTime, 'time')} {t('common.to')} {trip.to}</p>
           <p><strong>{t('common.busOperator')}:</strong> {trip.busOperator}</p>
           <p><strong>{t('common.duration')}:</strong> {trip.duration}</p>
           <p><strong>{t('common.basePrice')}:</strong> {getCurrencySymbol(currency)}{trip.originalPriceUSD * numberOfPassengers}</p>

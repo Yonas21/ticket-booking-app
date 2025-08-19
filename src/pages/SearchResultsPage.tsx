@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { searchTrips } from '../services/api';
 import BusCard from '../components/BusCard';
 import tripsData from '../data/trips.json';
 import { useTranslation } from 'react-i18next';
 
 const SearchResultsPage = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterOperator, setFilterOperator] = useState('All');
@@ -15,12 +16,26 @@ const SearchResultsPage = () => {
   const [amenities, setAmenities] = useState([]);
   const [departureTime, setDepartureTime] = useState('All');
   const [sortBy, setSortBy] = useState('priceAsc'); // priceAsc, priceDesc, departureAsc, departureDesc, durationAsc, durationDesc
+  const [flexibleDate, setFlexibleDate] = useState(false);
+  const [flexibleDateRange, setFlexibleDateRange] = useState(0);
   const { t } = useTranslation();
+
+  const formatDateForDisplay = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return dateString; // Return original if invalid
+    }
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(date);
+  };
 
   const from = searchParams.get('from');
   const to = searchParams.get('to');
   const departureDate = searchParams.get('departureDate');
-  const flexibleDateRange = searchParams.get('flexibleDateRange');
 
   const uniqueOperators = ['All', ...new Set(tripsData.map(trip => trip.busOperator))];
 
@@ -88,11 +103,31 @@ const SearchResultsPage = () => {
     setAmenities(prev => checked ? [...prev, value] : prev.filter(item => item !== value));
   };
 
+  const handleFlexibleDateChange = (e) => {
+    const isChecked = e.target.checked;
+    setFlexibleDate(isChecked);
+    if (!isChecked) {
+      setFlexibleDateRange(0);
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete('flexibleDateRange');
+      setSearchParams(newSearchParams);
+    }
+  };
+
+  const handleDateRangeChange = (e) => {
+    const range = parseInt(e.target.value, 10);
+    setFlexibleDateRange(range);
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set('flexibleDateRange', range.toString());
+    setSearchParams(newSearchParams);
+  };
+
+
   return (
     <div className="container slick-design">
       <h2 className="mb-4">{t('common.availableTripsFromTo', { from: from, to: to })}</h2>
-      {flexibleDateRange && (
-        <p className="alert alert-info">{t('common.showingResultsFor', { range: flexibleDateRange, date: departureDate })}</p>
+      {flexibleDateRange > 0 && (
+        <p className="alert alert-info">{t('common.showingResultsFor', { range: flexibleDateRange, date: formatDateForDisplay(departureDate) })}</p>
       )}
 
       <div className="card mb-4 p-3 shadow-sm">
@@ -184,6 +219,36 @@ const SearchResultsPage = () => {
               <option value="18-24">{t('common.evening')} (6pm - 12am)</option>
             </select>
           </div>
+		  <div className="col-md-12">
+		    <div className="form-check">
+		      <input
+		        className="form-check-input"
+		        type="checkbox"
+		        id="flexibleDateCheck"
+		        checked={flexibleDate}
+		        onChange={handleFlexibleDateChange}
+		      />
+		      <label className="form-check-label" htmlFor="flexibleDateCheck">
+		        {t('common.flexibleDates')}
+		      </label>
+		    </div>
+		  </div>
+		  {flexibleDate && (
+		    <div className="col-md-6">
+		      <label htmlFor="flexibleDateRange" className="form-label">{t('common.dateRange')}:</label>
+		      <select
+		        id="flexibleDateRange"
+		        className="form-select"
+		        value={flexibleDateRange}
+		        onChange={handleDateRangeChange}
+		      >
+		        <option value="0">{t('common.exactDate')}</option>
+		        <option value="1">+/- 1 {t('common.day')}</option>
+		        <option value="3">+/- 3 {t('common.days')}</option>
+		        <option value="7">+/- 7 {t('common.days')}</option>
+		      </select>
+		    </div>
+		  )}
         </div>
       </div>
 
