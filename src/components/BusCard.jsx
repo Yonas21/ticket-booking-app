@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { MapPin, Clock, Users, Star, ArrowRight, Wifi, Snowflake } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 import { useTranslation } from 'react-i18next';
 
@@ -17,43 +19,138 @@ const BusCard = ({ trip }) => {
     }
   };
 
+  const getAmenityIcon = (amenity) => {
+    switch (amenity.toLowerCase()) {
+      case 'wifi':
+        return <Wifi className="w-4 h-4" />;
+      case 'ac':
+        return <Snowflake className="w-4 h-4" />;
+      default:
+        return <Star className="w-4 h-4" />;
+    }
+  };
+
   return (
-    <div className="card mb-3 shadow-sm slick-design">
-      <div className="card-body">
-        <div className="row align-items-center">
-          <div className="col-md-2 col-sm-12 text-center text-md-start mb-2 mb-md-0">
-            <h5 className="card-title mb-0">{trip.busOperator}</h5>
-            <small className="text-muted">{t('common.busService')}</small>
-          </div>
-          <div className="col-md-7 col-sm-12">
-            <div className="d-flex justify-content-between align-items-center flex-wrap">
-              <div className="text-center flex-grow-1 mb-2 mb-sm-0">
-                <p className="mb-0 fw-bold">{trip.departureTime}</p>
-                <p className="mb-0 text-muted">{trip.from}</p>
-              </div>
-              <div className="text-center flex-grow-1 mb-2 mb-sm-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" fill="currentColor" className="bi bi-arrow-right-circle text-primary" viewBox="0 0 16 16">
-                  <path fillRule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-                </svg>
-                <p className="mb-0 text-muted"><small>{trip.duration}</small></p>
-                <p className="mb-0 text-muted"><small>{trip.stops} {t('common.stops')}</small></p>
-              </div>
-              <div className="text-center flex-grow-1">
-                <p className="mb-0 fw-bold">{trip.arrivalTime}</p>
-                <p className="mb-0 text-muted">{trip.to}</p>
-              </div>
+    <motion.div
+      className="card-modern overflow-hidden group"
+      whileHover={{ y: -8 }}
+      transition={{ duration: 0.3 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      {/* Header with operator info */}
+      <div className="p-6 border-b border-gray-100">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-primary-100 rounded-lg">
+              <Users className="w-5 h-5 text-primary-600" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">{trip.busOperator}</h3>
+              <p className="text-sm text-gray-500">{t('common.busService')}</p>
             </div>
           </div>
-          <div className="col-md-3 col-sm-12 text-md-end text-center mt-2 mt-md-0">
-            <h4>{getCurrencySymbol(currency)}{trip.price}</h4>
-            <p className="text-muted mb-2"><small>{trip.seatsAvailable} {t('common.seatsAvailable')}</small></p>
-            <Link to={`/booking/${trip.id}`} className="btn btn-primary" aria-label={t('common.bookNowForTrip', { from: trip.from, to: trip.to, time: trip.departureTime})}>
-              {t('common.bookNow')}
-            </Link>
+          <div className="flex items-center space-x-1">
+            {trip.reviews && trip.reviews.length > 0 && (
+              <>
+                <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                <span className="text-sm font-medium text-gray-700">
+                  {trip.reviews[0]?.rating || 4.5}
+                </span>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Route and timing */}
+        <div className="flex items-center justify-between">
+          <div className="text-center">
+            <div className="text-lg font-bold text-gray-900">{trip.departureTime}</div>
+            <div className="flex items-center justify-center space-x-1 text-sm text-gray-600">
+              <MapPin className="w-3 h-3" />
+              <span>{trip.from}</span>
+            </div>
+          </div>
+          
+          <div className="flex flex-col items-center space-y-1">
+            <div className="w-16 h-0.5 bg-gradient-to-r from-primary-400 to-primary-600"></div>
+            <div className="flex items-center space-x-1 text-xs text-gray-500">
+              <Clock className="w-3 h-3" />
+              <span>{trip.duration}</span>
+            </div>
+            {trip.intermediateStops && trip.intermediateStops.length > 0 && (
+              <div className="text-xs text-gray-400">
+                {trip.intermediateStops.length} {t('common.stops')}
+              </div>
+            )}
+          </div>
+          
+          <div className="text-center">
+            <div className="text-lg font-bold text-gray-900">{trip.arrivalTime}</div>
+            <div className="flex items-center justify-center space-x-1 text-sm text-gray-600">
+              <MapPin className="w-3 h-3" />
+              <span>{trip.to}</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Amenities */}
+      {trip.amenities && trip.amenities.length > 0 && (
+        <div className="px-6 py-3 bg-gray-50">
+          <div className="flex items-center space-x-4">
+            <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+              {t('common.amenities')}
+            </span>
+            <div className="flex items-center space-x-2">
+              {trip.amenities.slice(0, 3).map((amenity, index) => (
+                <div key={index} className="flex items-center space-x-1 text-xs text-gray-600">
+                  {getAmenityIcon(amenity)}
+                  <span>{amenity}</span>
+                </div>
+              ))}
+              {trip.amenities.length > 3 && (
+                <span className="text-xs text-gray-400">
+                  +{trip.amenities.length - 3} {t('common.more')}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Footer with price and booking */}
+      <div className="p-6">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <div className="text-2xl font-bold text-primary-600">
+              {getCurrencySymbol(currency)}{trip.price}
+            </div>
+            <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <Users className="w-4 h-4" />
+              <span>{trip.seatsAvailable} {t('common.seatsAvailable')}</span>
+            </div>
+          </div>
+          
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Link 
+              to={`/booking/${trip.id}`} 
+              className="btn-primary-modern flex items-center space-x-2 group-hover:shadow-lg"
+              aria-label={t('common.bookNowForTrip', { from: trip.from, to: trip.to, time: trip.departureTime})}
+            >
+              <span>{t('common.bookNow')}</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Hover effect overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 to-secondary-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+    </motion.div>
   );
 };
 

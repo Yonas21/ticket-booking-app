@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { MessageCircle } from 'lucide-react';
 import useAuthStore from './store/authStore';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -15,31 +17,42 @@ import BookingConfirmationPage from './pages/BookingConfirmationPage';
 import SupportPage from './pages/SupportPage';
 import PaymentPage from './pages/PaymentPage';
 import ErrorBoundary from './components/ErrorBoundary';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './i18n'; // Import i18n configuration
+import './i18n';
 import { I18nextProvider } from 'react-i18next';
-import i18n from './i18n'; // Import i18n instance
+import i18n from './i18n';
 
 const Layout = () => {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-shrink-0">
+      <main className="flex-1">
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 
 function App() {
   useEffect(() => {
-    useAuthStore.getState().rehydrate();
+    // Initialize auth store and apply theme
+    const { rehydrate } = useAuthStore.getState();
+    rehydrate();
   }, []);
 
   const handleLiveChatClick = () => {
-    alert('Welcome to Live Chat! How can I help you today? (Mock Chat)');
+    // Enhanced live chat with modern UI
+    const chatWindow = window.open(
+      'https://example.com/chat',
+      'LiveChat',
+      'width=400,height=600,scrollbars=yes,resizable=yes'
+    );
+    
+    if (!chatWindow) {
+      alert('Welcome to Live Chat! How can I help you today? (Mock Chat)');
+    }
   };
 
   return (
@@ -62,26 +75,37 @@ function App() {
             </Route>
           </Routes>
         </ErrorBoundary>
-        <button
-          className="btn btn-primary rounded-circle shadow-lg"
-          style={{
-            position: 'fixed',
-            bottom: '20px',
-            right: '20px',
-            width: '60px',
-            height: '60px',
-            fontSize: '1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000,
-          }}
+
+        {/* Enhanced Live Chat Button */}
+        <motion.button
+          className="fixed bottom-6 right-6 z-50 p-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
           onClick={handleLiveChatClick}
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          whileTap={{ scale: 0.9 }}
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.5 }}
           aria-label="Live Chat"
         >
-          <i className="bi bi-chat-dots-fill"></i>
-        </button>
-        <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+          <MessageCircle className="w-6 h-6 group-hover:animate-bounce" />
+          <div className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
+        </motion.button>
+
+        {/* Enhanced Toast Container */}
+        <ToastContainer
+          position="top-right"
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+          toastClassName="rounded-lg shadow-lg"
+          bodyClassName="font-medium"
+        />
       </Router>
     </I18nextProvider>
   );
