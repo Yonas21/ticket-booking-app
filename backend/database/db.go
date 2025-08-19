@@ -5,34 +5,39 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
+
+	"ticket-booking-app/backend/config"
+	"ticket-booking-app/backend/models"
 
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
-	"ticket-booking-app/backend/models"
 )
 
 var DB *sql.DB
 
-func InitDB() {
-	dbName := os.Getenv("TEST_DB_NAME")
-	if dbName == "" {
-		dbName = "ticket_booking"
-	}
-	connStr := fmt.Sprintf("dbname=%s sslmode=disable", dbName)
+func InitDB() error {
+	// Use the new configuration structure
+	connStr := config.AppConfig.GetDSN()
 
 	var err error
 	DB, err = sql.Open("postgres", connStr)
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("failed to open database: %v", err)
 	}
 
 	err = DB.Ping()
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("failed to ping database: %v", err)
 	}
 
-	fmt.Printf("Successfully connected to database: %s\n", dbName)
+	log.Printf("Successfully connected to database: %s", config.AppConfig.Database.DBName)
+	return nil
+}
+
+func CloseDB() {
+	if DB != nil {
+		DB.Close()
+	}
 }
 
 func ConnectToPostgres(dbName string) (*sql.DB, error) {
@@ -82,7 +87,6 @@ func GetTripByID(id int) (models.Trip, error) {
 	return trip, nil
 }
 
-
 func SearchTrips(from, to, date string, flexibleDateRange int) ([]models.Trip, error) {
 	var trips []models.Trip
 	query := `SELECT id, "from", "to", date, departure_time, arrival_time, price, seats_available, bus_operator, duration, amenities, intermediate_stops, reviews, seats FROM trips WHERE LOWER("from") = LOWER($1) AND LOWER("to") = LOWER($2)`
@@ -122,7 +126,6 @@ func SearchTrips(from, to, date string, flexibleDateRange int) ([]models.Trip, e
 	return trips, nil
 }
 
-
 func CreateTrip(trip models.Trip) (models.Trip, error) {
 	var id int
 	var seats pq.StringArray = trip.Seats
@@ -134,8 +137,6 @@ func CreateTrip(trip models.Trip) (models.Trip, error) {
 	trip.ID = id
 	return trip, nil
 }
-
-
 
 func CreateBooking(booking models.Booking) (int, error) {
 	var id int
