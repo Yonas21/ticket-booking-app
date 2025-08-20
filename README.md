@@ -1,110 +1,241 @@
-# Bus Ticket App
+# Bus Ticket Booking System
 
-## Description
-This is a modern web application for booking bus tickets, built with React and Vite. It provides a user-friendly interface for searching, booking, and managing bus tickets, along with user authentication and internationalization support.
+A modern, full-stack bus ticket booking application built with React (Frontend) and Go (Backend).
 
-## Features
-*   User Authentication (Login, Signup)
-*   Bus Ticket Search and Filtering
-*   Seat Selection
-*   Booking and Confirmation
-*   User Profile Management
-*   Contact and Support Pages
-*   Internationalization (English and Amharic)
-*   Responsive Design
+## 🚀 Features
 
-## Technologies Used
-*   **Frontend:** React.js
-*   **Backend:** Go
-*   **Build Tool:** Vite
-*   **State Management:** Zustand
-*   **Routing:** React Router DOM
-*   **Styling:** CSS
-*   **Internationalization:** i18next, react-i18next
-*   **Data Fetching:** Axios
+### Frontend (React)
+- **Modern UI/UX**: Built with Tailwind CSS and Framer Motion
+- **Responsive Design**: Works perfectly on desktop, tablet, and mobile
+- **Internationalization**: Support for English and Amharic
+- **Real-time Updates**: Live seat availability and booking status
+- **Advanced Search**: Flexible date search and route filtering
+- **User Dashboard**: Booking history, profile management
+- **Payment Integration**: Secure payment processing
+- **Accessibility**: WCAG compliant design
 
-## Installation and Setup
+### Backend (Go)
+- **RESTful API**: Clean, well-documented endpoints
+- **JWT Authentication**: Secure token-based authentication
+- **Database**: PostgreSQL with proper indexing
+- **Validation**: Comprehensive input validation
+- **Error Handling**: Proper error responses and logging
+- **Security**: CORS, rate limiting, input sanitization
+- **Monitoring**: Health checks and metrics
 
-To get a local copy up and running, follow these simple steps.
+## 🛠️ Tech Stack
 
-### Prerequisites
-*   Node.js (LTS version recommended)
-*   npm or Yarn
-
-### Installation
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/bus-ticket-app.git
-    cd bus-ticket-app
-    ```
-    (Note: Replace `https://github.com/your-username/bus-ticket-app.git` with the actual repository URL if available.)
-
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    # or
-    yarn install
-    ```
-
-3.  **Start the development server:**
-    ```bash
-    npm run dev
-    # or
-    yarn dev
-    ```
-    The application will be accessible at `http://localhost:5173` (or another port if 5173 is in use).
+### Frontend
+- **React 19** - Modern React with hooks
+- **Tailwind CSS** - Utility-first CSS framework
+- **Framer Motion** - Animation library
+- **React Router** - Client-side routing
+- **Zustand** - State management
+- **React Query** - Server state management
+- **Lucide React** - Icon library
+- **React Hook Form** - Form handling
+- **i18next** - Internationalization
 
 ### Backend
+- **Go 1.23** - High-performance language
+- **Gorilla Mux** - HTTP router
+- **PostgreSQL** - Relational database
+- **JWT** - Authentication
+- **Validator** - Input validation
+- **Logrus** - Structured logging
+- **CORS** - Cross-origin resource sharing
 
-1.  **Navigate to the backend directory:**
-    ```bash
-    cd backend
-    ```
+## 📋 Prerequisites
 
-2.  **Install dependencies:**
-    ```bash
-    go mod tidy
-    ```
+- Node.js 18+ and npm
+- Go 1.23+
+- PostgreSQL 12+
+- Redis (optional, for caching)
 
-3.  **Run the backend server:**
-    ```bash
-    go run main.go
-    ```
-    The backend server will be running on `http://localhost:8080`.
+## 🚀 Quick Start
 
-4.  **Build for production:**
-    ```bash
-    npm run build
-    # or
-    yarn build
-    ```
-    This will create a `dist` directory with the production-ready build.
+### 1. Clone the Repository
+```bash
+git clone https://github.com/yourusername/ticket-booking-app.git
+cd ticket-booking-app
+```
 
-## Usage
+### 2. Backend Setup
 
-*   **Home Page:** Browse available bus trips.
-*   **Search:** Use the search bar to find trips based on origin, destination, and date.
-*   **Booking:** Select a trip, choose your seats, and proceed to booking confirmation.
-*   **Login/Signup:** Create an account or log in to manage your bookings and profile.
-*   **Profile Page:** View and update your personal information.
-*   **Language Selection:** Switch between English and Amharic using the language selector.
+```bash
+cd backend
 
-## Screenshots
-(Add screenshots here to showcase different parts of the application, e.g., Home Page, Search Results, Seat Selection, Booking Confirmation, Login Page, Profile Page)
+# Install dependencies
+go mod tidy
 
-## Contributing
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your configuration
 
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
+# Set up database
+# Create a PostgreSQL database named 'bus_booking'
+createdb bus_booking
 
-## License
-Distributed under the MIT License. See `LICENSE` for more information. (Note: If a LICENSE file exists, ensure it's included. Otherwise, consider adding one.)
+# Run database migrations
+psql -d bus_booking -f database/init.sql
 
-## Contact
-Yonas Alem - yonalem21@gmail.com
-Project Link: [https://github.com/Yonas21/ticket-booking-app](https://github.com/Yonas21/ticket-booking-app)
+# Start the server
+go run main.go
+```
+
+### 3. Frontend Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+The application will be available at:
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:8080
+
+## 📁 Project Structure
+
+```
+ticket-booking-app/
+├── backend/
+│   ├── auth/           # Authentication middleware
+│   ├── config/         # Configuration management
+│   ├── database/       # Database operations
+│   ├── handlers/       # HTTP request handlers
+│   ├── middleware/     # Custom middleware
+│   ├── models/         # Data models
+│   └── utils/          # Utility functions
+├── src/
+│   ├── components/     # Reusable React components
+│   ├── pages/          # Page components
+│   ├── services/       # API services
+│   ├── store/          # State management
+│   ├── assets/         # Static assets
+│   └── locales/        # Translation files
+├── public/             # Public assets
+└── docs/              # Documentation
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create a `.env` file in the backend directory:
+
+```env
+# Server Configuration
+PORT=8080
+HOST=localhost
+
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=your_password
+DB_NAME=bus_booking
+
+# JWT Configuration
+JWT_SECRET=your-secret-key
+JWT_EXPIRATION=24h
+
+# CORS Configuration
+ALLOWED_ORIGINS=http://localhost:5173
+```
+
+## 📚 API Documentation
+
+### Authentication Endpoints
+
+- `POST /api/auth/signup` - User registration
+- `POST /api/auth/login` - User login
+
+### Trip Endpoints
+
+- `GET /api/public/trips/search` - Search trips
+- `GET /api/public/trips/{id}` - Get trip details
+
+### Booking Endpoints
+
+- `POST /api/bookings` - Create booking (authenticated)
+- `GET /api/profile` - Get user profile (authenticated)
+
+## 🎨 UI Components
+
+The application includes modern, reusable components:
+
+- **Header**: Navigation with language/currency switcher
+- **BusCard**: Trip information display
+- **SeatSelection**: Interactive seat picker
+- **SearchForm**: Advanced search with filters
+- **BookingForm**: Multi-step booking process
+
+## 🔒 Security Features
+
+- JWT token authentication
+- Password hashing with bcrypt
+- Input validation and sanitization
+- CORS protection
+- Rate limiting
+- SQL injection prevention
+
+## 🧪 Testing
+
+### Frontend Testing
+```bash
+npm run test
+```
+
+### Backend Testing
+```bash
+cd backend
+go test ./...
+```
+
+## 📦 Deployment
+
+### Frontend Deployment
+```bash
+npm run build
+# Deploy the dist/ folder to your hosting service
+```
+
+### Backend Deployment
+```bash
+cd backend
+go build -o main .
+# Deploy the binary to your server
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+For support, email support@busticket.et or create an issue in the repository.
+
+## 🔄 Changelog
+
+### v2.0.0 (Current)
+- Complete UI/UX redesign with Tailwind CSS
+- Enhanced backend with better security
+- Improved performance and scalability
+- Added comprehensive error handling
+- Internationalization support
+
+### v1.0.0
+- Initial release with basic functionality
+- Bootstrap-based UI
+- Basic CRUD operations

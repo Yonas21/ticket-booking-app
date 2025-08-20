@@ -1,43 +1,108 @@
 package main
 
 import (
-	"fmt"
-	"log"
+	"context"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"ticket-booking-app/backend/auth"
+	"ticket-booking-app/backend/config"
 	"ticket-booking-app/backend/database"
 	"ticket-booking-app/backend/handlers"
 	"ticket-booking-app/backend/middleware"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
-	// Initialize database
-	database.InitDB()
+	// Initialize logger
+	logger := logrus.New()
+	logger.SetFormatter(&logrus.JSONFormatter{})
+	logger.SetLevel(logrus.InfoLevel)
 
+	// Load configuration
+	if err := config.LoadConfig(); err != nil {
+		logger.Fatal("Failed to load configuration:", err)
+	}
+
+	// Initialize database
+	if err := database.InitDB(); err != nil {
+		logger.Fatal("Failed to initialize database:", err)
+	}
+	defer database.CloseDB()
+
+	// Create router
 	r := mux.NewRouter()
+
+	// Apply middleware
 	r.Use(middleware.LoggingMiddleware)
 
-	// API endpoints
-	r.HandleFunc("/api/auth/signup", handlers.SignupHandler).Methods("POST")
-	r.HandleFunc("/api/auth/login", handlers.LoginHandler).Methods("POST")
-	r.HandleFunc("/api/trips/search", handlers.SearchTripsHandler).Methods("GET")
-	r.Handle("/api/trips/{id}", auth.Middleware(http.HandlerFunc(handlers.GetTripByIDHandler))).Methods("GET")
-	r.Handle("/api/bookings", auth.Middleware(http.HandlerFunc(handlers.CreateBookingHandler))).Methods("POST")
-	r.Handle("/api/profile", auth.Middleware(http.HandlerFunc(handlers.GetProfileHandler))).Methods("GET")
+	// API routes
+	api := r.PathPrefix("/api").Subrouter()
 
-	// CORS handler
+	// Auth routes (no authentication required)
+	authRoutes := api.PathPrefix("/auth").Subrouter()
+	authRoutes.HandleFunc("/signup", handlers.SignupHandler).Methods("POST")
+	authRoutes.HandleFunc("/login", handlers.LoginHandler).Methods("POST")
+
+	// Public routes (no authentication required)
+	api.HandleFunc("/trips/search", handlers.SearchTripsHandler).Methods("GET")
+	api.HandleFunc("/trips/{id}", handlers.GetTripByIDHandler).Methods("GET")
+
+	// Protected routes (authentication required)
+	protectedRoutes := api.PathPrefix("/").Subrouter()
+	protectedRoutes.Use(auth.Middleware)
+
+	// Booking routes
+	protectedRoutes.HandleFunc("/bookings", handlers.CreateBookingHandler).Methods("POST")
+	protectedRoutes.HandleFunc("/profile", handlers.GetProfileHandler).Methods("GET")
+
+	// CORS configuration
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders: []string{"Authorization", "Content-Type"},
+		AllowedOrigins:   []string{"http://localhost:3000", "http://localhost:5173", "https://yourdomain.com"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Authorization", "Content-Type", "X-Requested-With"},
+		AllowCredentials: true,
+		MaxAge:           86400, // 24 hours
 	})
 
-	handler := c.Handler(r)
+	// Create HTTP server
+	server := &http.Server{
+		Addr:         ":" + config.AppConfig.Server.Port,
+		Handler:      c.Handler(r),
+		ReadTimeout:  config.AppConfig.Server.ReadTimeout,
+		WriteTimeout: config.AppConfig.Server.WriteTimeout,
+		IdleTimeout:  config.AppConfig.Server.IdleTimeout,
+	}
 
-	fmt.Println("Server starting on port 8080...")
-	log.Fatal(http.ListenAndServe(":8080", handler))
+	// Start server in a goroutine
+	go func() {
+		logger.Infof("Server starting on port %s...", config.AppConfig.Server.Port)
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			logger.Fatal("Server failed to start:", err)
+		}
+	}()
+
+	// Wait for interrupt signal to gracefully shutdown the server
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	logger.Info("Shutting down server...")
+
+	// Create a deadline for server shutdown
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// Attempt graceful shutdown
+	if err := server.Shutdown(ctx); err != nil {
+		logger.Fatal("Server forced to shutdown:", err)
+	}
+
+	logger.Info("Server exited")
 }

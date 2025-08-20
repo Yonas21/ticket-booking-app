@@ -3,134 +3,390 @@
     "id": 1,
     "from": "Addis Ababa",
     "to": "Adama",
-    "date": "2025-09-10",
+    "date": "2025-08-20",
     "departureTime": "08:00",
-    "arrivalTime": "10:00",
-    "price": 150,
-    "seatsAvailable": 30,
+    "arrivalTime": "09:30",
+    "price": 150.00,
+    "seatsAvailable": 40,
     "busOperator": "Selam Bus",
-    "duration": "2 hours",
-    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4"],
-    "amenities": ["Wi-Fi", "Air Conditioning"],
-    "intermediateStops": ["Debre Zeyit"],
+    "duration": "1h 30m",
+    "amenities": ["WiFi", "AC", "Restroom"],
+    "intermediateStops": ["Bishoftu"],
     "reviews": [
-      { "id": 1, "rating": 5, "comment": "Very comfortable and fast.", "reviewer": "Abebe" }
-    ]
+      {
+        "rating": 5,
+        "comment": "Great trip! Very comfortable and on time.",
+        "reviewer": "Abebe K."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Luxury Coach",
+    "busNumber": "SEL-001",
+    "driverName": "Tadesse Bekele",
+    "status": "scheduled"
   },
   {
     "id": 2,
     "from": "Addis Ababa",
     "to": "Hawassa",
-    "date": "2025-09-11",
-    "departureTime": "07:00",
-    "arrivalTime": "12:00",
-    "price": 300,
-    "seatsAvailable": 25,
+    "date": "2025-08-21",
+    "departureTime": "10:00",
+    "arrivalTime": "13:00",
+    "price": 300.00,
+    "seatsAvailable": 30,
     "busOperator": "Sky Bus",
-    "duration": "5 hours",
-    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4"],
-    "amenities": ["Wi-Fi", "Power Outlets", "Restroom"],
-    "intermediateStops": ["Ziway", "Shashamane"],
+    "duration": "3h 0m",
+    "amenities": ["AC", "Restroom"],
+    "intermediateStops": ["Mojo", "Adama"],
     "reviews": [
-       { "id": 2, "rating": 4, "comment": "Good service.", "reviewer": "Chaltu" }
-    ]
+      {
+        "rating": 4,
+        "comment": "Comfortable journey with good service.",
+        "reviewer": "Kebede M."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Standard Coach",
+    "busNumber": "SKY-002",
+    "driverName": "Mulugeta Haile",
+    "status": "scheduled"
   },
   {
     "id": 3,
     "from": "Addis Ababa",
-    "to": "Bahir Dar",
-    "date": "2025-09-12",
-    "departureTime": "06:00",
-    "arrivalTime": "15:00",
-    "price": 500,
-    "seatsAvailable": 20,
-    "busOperator": "Abay Bus",
-    "duration": "9 hours",
-    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4"],
-    "amenities": ["Restroom", "Snacks"],
-    "intermediateStops": ["Debre Markos", "Dejen"],
-    "reviews": []
+    "to": "Gondar",
+    "date": "2025-08-22",
+    "departureTime": "07:30",
+    "arrivalTime": "16:00",
+    "price": 450.00,
+    "seatsAvailable": 25,
+    "busOperator": "Ethiopian Bus",
+    "duration": "8h 30m",
+    "amenities": ["WiFi", "AC", "Restroom", "Power Outlet"],
+    "intermediateStops": ["Bahir Dar", "Debre Markos"],
+    "reviews": [
+      {
+        "rating": 5,
+        "comment": "Excellent service and very clean bus.",
+        "reviewer": "Yohannes T."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Luxury Coach",
+    "busNumber": "ETH-003",
+    "driverName": "Dawit Mengistu",
+    "status": "scheduled"
   },
   {
     "id": 4,
-    "from": "Gondar",
-    "to": "Axum",
-    "date": "2025-09-13",
-    "departureTime": "07:30",
-    "arrivalTime": "12:30",
-    "price": 250,
-    "seatsAvailable": 15,
-    "busOperator": "Ethio Bus",
-    "duration": "5 hours",
-    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4"],
-    "amenities": ["Air Conditioning"],
-    "intermediateStops": ["Debarq", "Shire"],
+    "from": "Addis Ababa",
+    "to": "Mekelle",
+    "date": "2025-08-23",
+    "departureTime": "06:00",
+    "arrivalTime": "18:00",
+    "price": 600.00,
+    "seatsAvailable": 20,
+    "busOperator": "Tigray Bus",
+    "duration": "12h 0m",
+    "amenities": ["WiFi", "AC", "Restroom", "Power Outlet", "Snacks"],
+    "intermediateStops": ["Dessie", "Woldiya", "Alamata"],
     "reviews": [
-      { "id": 3, "rating": 4, "comment": "Amazing view on the road.", "reviewer": "Gebre" }
-    ]
+      {
+        "rating": 4,
+        "comment": "Long journey but very comfortable.",
+        "reviewer": "Tekle H."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Luxury Coach",
+    "busNumber": "TIG-004",
+    "driverName": "Girma Alemu",
+    "status": "scheduled"
   },
   {
     "id": 5,
-    "from": "Mekelle",
-    "to": "Addis Ababa",
-    "date": "2025-09-14",
-    "departureTime": "05:00",
-    "arrivalTime": "18:00",
-    "price": 700,
-    "seatsAvailable": 22,
-    "busOperator": "Selam Bus",
-    "duration": "13 hours",
-    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4"],
-    "amenities": ["Wi-Fi", "Power Outlets", "Restroom", "Meals"],
-    "intermediateStops": ["Dessie", "Kombolcha"],
-    "reviews": []
+    "from": "Addis Ababa",
+    "to": "Bahir Dar",
+    "date": "2025-08-24",
+    "departureTime": "09:00",
+    "arrivalTime": "15:00",
+    "price": 350.00,
+    "seatsAvailable": 35,
+    "busOperator": "Amhara Bus",
+    "duration": "6h 0m",
+    "amenities": ["AC", "Restroom"],
+    "intermediateStops": ["Debre Markos"],
+    "reviews": [
+      {
+        "rating": 4,
+        "comment": "Good service and punctual departure.",
+        "reviewer": "Sara M."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Standard Coach",
+    "busNumber": "AMH-005",
+    "driverName": "Bekele Tadesse",
+    "status": "scheduled"
   },
   {
     "id": 6,
-    "from": "Dire Dawa",
-    "to": "Harar",
-    "date": "2025-09-15",
-    "departureTime": "09:00",
-    "arrivalTime": "10:30",
-    "price": 80,
-    "seatsAvailable": 35,
-    "busOperator": "Harar Bus",
-    "duration": "1.5 hours",
-    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4"],
-    "amenities": [],
-    "intermediateStops": [],
-    "reviews": []
+    "from": "Adama",
+    "to": "Addis Ababa",
+    "date": "2025-08-25",
+    "departureTime": "07:00",
+    "arrivalTime": "08:30",
+    "price": 150.00,
+    "seatsAvailable": 38,
+    "busOperator": "Selam Bus",
+    "duration": "1h 30m",
+    "amenities": ["WiFi", "AC", "Restroom"],
+    "intermediateStops": ["Bishoftu"],
+    "reviews": [
+      {
+        "rating": 5,
+        "comment": "Quick and comfortable journey.",
+        "reviewer": "Dawit K."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Luxury Coach",
+    "busNumber": "SEL-006",
+    "driverName": "Tadesse Bekele",
+    "status": "scheduled"
   },
   {
     "id": 7,
-    "from": "Jimma",
+    "from": "Hawassa",
     "to": "Addis Ababa",
-    "date": "2025-09-16",
-    "departureTime": "06:30",
-    "arrivalTime": "13:00",
-    "price": 400,
-    "seatsAvailable": 18,
-    "busOperator": "Oda Bus",
-    "duration": "6.5 hours",
-    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4"],
-    "amenities": ["Wi-Fi"],
-    "intermediateStops": ["Welkite"],
-    "reviews": []
+    "date": "2025-08-26",
+    "departureTime": "08:00",
+    "arrivalTime": "11:00",
+    "price": 300.00,
+    "seatsAvailable": 28,
+    "busOperator": "Sky Bus",
+    "duration": "3h 0m",
+    "amenities": ["AC", "Restroom"],
+    "intermediateStops": ["Adama", "Mojo"],
+    "reviews": [
+      {
+        "rating": 4,
+        "comment": "Reliable service and clean bus.",
+        "reviewer": "Martha L."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Standard Coach",
+    "busNumber": "SKY-007",
+    "driverName": "Mulugeta Haile",
+    "status": "scheduled"
   },
   {
     "id": 8,
-    "from": "Arba Minch",
-    "to": "Konso",
-    "date": "2025-09-17",
+    "from": "Gondar",
+    "to": "Addis Ababa",
+    "date": "2025-08-27",
+    "departureTime": "06:30",
+    "arrivalTime": "15:00",
+    "price": 450.00,
+    "seatsAvailable": 22,
+    "busOperator": "Ethiopian Bus",
+    "duration": "8h 30m",
+    "amenities": ["WiFi", "AC", "Restroom", "Power Outlet"],
+    "intermediateStops": ["Debre Markos", "Bahir Dar"],
+    "reviews": [
+      {
+        "rating": 5,
+        "comment": "Excellent long-distance service.",
+        "reviewer": "Solomon A."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Luxury Coach",
+    "busNumber": "ETH-008",
+    "driverName": "Dawit Mengistu",
+    "status": "scheduled"
+  },
+  {
+    "id": 9,
+    "from": "Mekelle",
+    "to": "Addis Ababa",
+    "date": "2025-08-28",
+    "departureTime": "05:00",
+    "arrivalTime": "17:00",
+    "price": 600.00,
+    "seatsAvailable": 18,
+    "busOperator": "Tigray Bus",
+    "duration": "12h 0m",
+    "amenities": ["WiFi", "AC", "Restroom", "Power Outlet", "Snacks"],
+    "intermediateStops": ["Alamata", "Woldiya", "Dessie"],
+    "reviews": [
+      {
+        "rating": 4,
+        "comment": "Comfortable for such a long journey.",
+        "reviewer": "Hagos T."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Luxury Coach",
+    "busNumber": "TIG-009",
+    "driverName": "Girma Alemu",
+    "status": "scheduled"
+  },
+  {
+    "id": 10,
+    "from": "Bahir Dar",
+    "to": "Addis Ababa",
+    "date": "2025-08-29",
     "departureTime": "08:00",
-    "arrivalTime": "10:00",
-    "price": 120,
-    "seatsAvailable": 28,
-    "busOperator": "Segen Bus",
-    "duration": "2 hours",
-    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4"],
-    "amenities": [],
-    "intermediateStops": [],
-    "reviews": []
+    "arrivalTime": "14:00",
+    "price": 350.00,
+    "seatsAvailable": 32,
+    "busOperator": "Amhara Bus",
+    "duration": "6h 0m",
+    "amenities": ["AC", "Restroom"],
+    "intermediateStops": ["Debre Markos"],
+    "reviews": [
+      {
+        "rating": 4,
+        "comment": "Good value for money.",
+        "reviewer": "Kidist B."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Standard Coach",
+    "busNumber": "AMH-010",
+    "driverName": "Bekele Tadesse",
+    "status": "scheduled"
+  },
+  {
+    "id": 11,
+    "from": "Addis Ababa",
+    "to": "Jimma",
+    "date": "2025-08-30",
+    "departureTime": "07:00",
+    "arrivalTime": "12:00",
+    "price": 250.00,
+    "seatsAvailable": 36,
+    "busOperator": "Oromia Bus",
+    "duration": "5h 0m",
+    "amenities": ["AC", "Restroom"],
+    "intermediateStops": ["Adama", "Shashamane"],
+    "reviews": [
+      {
+        "rating": 4,
+        "comment": "Punctual and clean service.",
+        "reviewer": "Tolasa D."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Standard Coach",
+    "busNumber": "ORO-011",
+    "driverName": "Abebe Kebede",
+    "status": "scheduled"
+  },
+  {
+    "id": 12,
+    "from": "Jimma",
+    "to": "Addis Ababa",
+    "date": "2025-08-31",
+    "departureTime": "08:30",
+    "arrivalTime": "13:30",
+    "price": 250.00,
+    "seatsAvailable": 34,
+    "busOperator": "Oromia Bus",
+    "duration": "5h 0m",
+    "amenities": ["AC", "Restroom"],
+    "intermediateStops": ["Shashamane", "Adama"],
+    "reviews": [
+      {
+        "rating": 4,
+        "comment": "Reliable service.",
+        "reviewer": "Bekele M."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Standard Coach",
+    "busNumber": "ORO-012",
+    "driverName": "Abebe Kebede",
+    "status": "scheduled"
+  },
+  {
+    "id": 13,
+    "from": "Addis Ababa",
+    "to": "Dire Dawa",
+    "date": "2025-09-01",
+    "departureTime": "06:00",
+    "arrivalTime": "14:00",
+    "price": 400.00,
+    "seatsAvailable": 26,
+    "busOperator": "Somali Bus",
+    "duration": "8h 0m",
+    "amenities": ["WiFi", "AC", "Restroom", "Power Outlet"],
+    "intermediateStops": ["Adama", "Awash", "Mieso"],
+    "reviews": [
+      {
+        "rating": 5,
+        "comment": "Excellent service and comfortable journey.",
+        "reviewer": "Ahmed M."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Luxury Coach",
+    "busNumber": "SOM-013",
+    "driverName": "Mohammed Ali",
+    "status": "scheduled"
+  },
+  {
+    "id": 14,
+    "from": "Dire Dawa",
+    "to": "Addis Ababa",
+    "date": "2025-09-02",
+    "departureTime": "07:00",
+    "arrivalTime": "15:00",
+    "price": 400.00,
+    "seatsAvailable": 24,
+    "busOperator": "Somali Bus",
+    "duration": "8h 0m",
+    "amenities": ["WiFi", "AC", "Restroom", "Power Outlet"],
+    "intermediateStops": ["Mieso", "Awash", "Adama"],
+    "reviews": [
+      {
+        "rating": 4,
+        "comment": "Good service and on time.",
+        "reviewer": "Fatima H."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Luxury Coach",
+    "busNumber": "SOM-014",
+    "driverName": "Mohammed Ali",
+    "status": "scheduled"
+  },
+  {
+    "id": 15,
+    "from": "Addis Ababa",
+    "to": "Adama",
+    "date": "2025-09-03",
+    "departureTime": "09:00",
+    "arrivalTime": "10:30",
+    "price": 150.00,
+    "seatsAvailable": 40,
+    "busOperator": "Selam Bus",
+    "duration": "1h 30m",
+    "amenities": ["WiFi", "AC", "Restroom"],
+    "intermediateStops": ["Bishoftu"],
+    "reviews": [
+      {
+        "rating": 5,
+        "comment": "Perfect for daily commute.",
+        "reviewer": "Yohannes K."
+      }
+    ],
+    "seats": ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "E1", "E2", "E3", "E4", "F1", "F2", "F3", "F4", "G1", "G2", "G3", "G4", "H1", "H2", "H3", "H4", "I1", "I2", "I3", "I4", "J1", "J2", "J3", "J4"],
+    "busType": "Luxury Coach",
+    "busNumber": "SEL-015",
+    "driverName": "Tadesse Bekele",
+    "status": "scheduled"
   }
 ]

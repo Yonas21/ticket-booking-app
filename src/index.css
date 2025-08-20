@@ -1,219 +1,177 @@
 @import url('./brand.css');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-body {
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-base);
-  background-color: #f8f9fa;
-  color: #343a40; /* Dark gray for body text */
+@layer base {
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    color: #1f2937;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .dark body {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    color: #f9fafb;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Dark mode text colors */
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    color: #f9fafb;
+  }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-family-base);
-  font-weight: 600;
-  line-height: 1.2;
-  margin-bottom: 0.5rem;
+@layer components {
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .card-modern {
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+
+  .btn-modern {
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 active:scale-95;
+  }
+
+  .btn-primary-modern {
+    @apply btn-modern bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg hover:shadow-xl hover:from-primary-600 hover:to-primary-700;
+  }
+
+  .btn-secondary-modern {
+    @apply btn-modern bg-gradient-to-r from-secondary-500 to-secondary-600 text-white shadow-lg hover:shadow-xl hover:from-secondary-600 hover:to-secondary-700;
+  }
+
+  .input-modern {
+    @apply w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white;
+  }
+
+  .form-label-modern {
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
+  }
 }
 
-h1 { font-size: var(--h1-font-size); }
-h2 { font-size: var(--h2-font-size); }
-h3 { font-size: var(--h3-font-size); }
-h4 { font-size: var(--h4-font-size); }
-h5 { font-size: var(--h5-font-size); }
-h6 { font-size: var(--h6-font-size); }
-
-.slick-design .card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Subtle shadow */
+/* Enhanced animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
 
-.slick-design .card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(34, 197, 94, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.8); }
 }
 
-.btn {
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  transition: all 0.2s ease-in-out;
+.float-animation {
+  animation: float 3s ease-in-out infinite;
 }
 
-.btn:hover {
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
 
-.btn-primary {
-  background-color: var(--brand-primary);
-  border-color: var(--brand-primary);
+/* Enhanced seat selection */
+.seat-selection-grid {
+  @apply grid grid-cols-8 gap-2 max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg;
 }
 
-.btn-primary:hover {
-  background-color: var(--brand-primary-dark);
-  border-color: var(--brand-primary-dark);
+.seat-button {
+  @apply w-12 h-12 rounded-lg font-semibold transition-all duration-200 transform hover:scale-110;
 }
 
-.btn-outline-primary {
-  color: var(--brand-primary);
-  border-color: var(--brand-primary);
+.seat-available {
+  @apply seat-button bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900 hover:text-primary-700 dark:hover:text-primary-300;
 }
 
-.btn-outline-primary:hover {
-  color: #fff;
-  background-color: var(--brand-primary);
-  border-color: var(--brand-primary);
+.seat-selected {
+  @apply seat-button bg-primary-500 text-white shadow-lg;
 }
 
-.text-primary {
-  color: var(--brand-primary) !important;
+.seat-booked {
+  @apply seat-button bg-red-500 text-white cursor-not-allowed opacity-50;
 }
 
-.border-primary {
-  border-color: var(--brand-primary) !important;
-}
-
-.bg-primary {
-  background-color: var(--brand-primary) !important;
-}
-
-/* Custom styles for form elements */
-.form-control,
-.form-select {
-  border-radius: 0.5rem;
-  border: 1px solid #ced4da;
-  padding: 0.75rem 1rem;
-  transition: all 0.2s ease-in-out;
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: var(--brand-primary);
-  box-shadow: 0 0 0 0.25rem rgba(var(--brand-primary-rgb), 0.25);
-}
-
-/* DatePicker specific styling */
-.react-datepicker-wrapper .react-datepicker__input-container .form-control {
-  width: 100%;
-}
-
+/* Enhanced DatePicker styling */
 .react-datepicker {
-  border: 1px solid #ced4da;
-  border-radius: 0.5rem;
-  font-family: var(--font-family-base);
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  @apply border border-gray-200 rounded-xl font-sans shadow-xl;
 }
 
 .react-datepicker__header {
-  background-color: var(--brand-primary);
-  color: #fff;
-  border-bottom: none;
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
+  @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white border-none rounded-t-xl;
 }
 
 .react-datepicker__current-month,
 .react-datepicker__day-name {
-  color: #fff;
+  @apply text-white font-medium;
 }
 
 .react-datepicker__day--selected,
 .react-datepicker__day--keyboard-selected {
-  background-color: var(--brand-primary);
-  color: #fff;
-  border-radius: 0.25rem;
-}
-
-.react-datepicker__day--selected:hover,
-.react-datepicker__day--keyboard-selected:hover {
-  background-color: var(--brand-primary-dark);
+  @apply bg-primary-500 text-white rounded-lg;
 }
 
 .react-datepicker__day:hover {
-  background-color: rgba(var(--brand-primary-rgb), 0.1);
-  border-radius: 0.25rem;
+  @apply bg-primary-100 text-primary-700 rounded-lg;
 }
 
-.react-datepicker__navigation--previous,
-.react-datepicker__navigation--next {
-  border-color: #fff;
+/* Loading animations */
+.loading-spinner {
+  @apply w-8 h-8 border-4 border-primary-200 border-t-primary-500 rounded-full animate-spin;
 }
 
-.react-datepicker__navigation--previous:hover,
-.react-datepicker__navigation--next:hover {
-  border-color: rgba(255,255,255,0.7);
+.skeleton {
+  @apply bg-gray-200 animate-pulse rounded;
 }
 
-/* Seat Selection Grid */
-.seat-selection-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-  gap: 10px;
-  max-width: 400px; /* Limit width for better visual */
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #e9ecef;
-  border-radius: 0.5rem;
-  background-color: #fdfdfd;
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .seat-selection-grid {
+    @apply grid-cols-6 gap-1 p-4;
+  }
+  
+  .seat-button {
+    @apply w-10 h-10 text-sm;
+  }
 }
 
-.seat-selection-grid .btn {
-  width: 100%;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  border-radius: 0.3rem;
-  transition: all 0.2s ease-in-out;
+/* Dark mode transitions */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
-.seat-selection-grid .btn.active {
-  background-color: var(--brand-primary);
-  color: #fff;
-  border-color: var(--brand-primary);
+/* Dark mode specific styles */
+.dark .glass-effect {
+  background: rgba(31, 41, 55, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(75, 85, 99, 0.18);
 }
 
-.seat-selection-grid .btn.active:hover {
-  background-color: var(--brand-primary-dark);
-  border-color: var(--brand-primary-dark);
+.dark .skeleton {
+  @apply bg-gray-700;
 }
 
-.seat-selection-grid .btn.btn-secondary {
-  background-color: var(--brand-secondary);
-  border-color: var(--brand-secondary);
-  color: #fff;
-  cursor: not-allowed;
+/* Toast notifications dark mode */
+.dark .Toastify__toast {
+  background-color: #374151;
+  color: #f9fafb;
 }
 
-.seat-selection-grid .btn.btn-secondary:hover {
-  background-color: var(--brand-secondary);
-  border-color: var(--brand-secondary);
+.dark .Toastify__toast-body {
+  color: #f9fafb;
 }
 
-/* Custom Loader */
-.custom-loader {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 150px;
-}
-
-.custom-loader .spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid rgba(0, 0, 0, 0.1);
-  border-top-color: var(--brand-primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-.custom-loader p {
-  margin-top: 15px;
-  font-size: 1.1rem;
-  color: #555;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.dark .Toastify__close-button {
+  color: #f9fafb;
 }

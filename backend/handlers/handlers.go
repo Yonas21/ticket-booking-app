@@ -78,21 +78,23 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create token
-	expirationTime := time.Now().Add(5 * time.Minute)
+	expirationTime := time.Now().Add(config.AppConfig.JWT.Expiration)
 	claims := &jwt.StandardClaims{
 		Subject:   user.Email,
 		ExpiresAt: expirationTime.Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(config.JWTKey)
+	tokenString, err := token.SignedString([]byte(config.AppConfig.JWT.SecretKey))
 	if err != nil {
 		http.Error(w, "Failed to create token", http.StatusInternalServerError)
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"token": tokenString, "name": user.Name})
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"token": tokenString,
+		"user":  user,
+	})
 }
 
 func SearchTripsHandler(w http.ResponseWriter, r *http.Request) {
