@@ -10,6 +10,12 @@
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     min-height: 100vh;
     color: #1f2937;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .dark body {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    color: #f9fafb;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -17,6 +23,11 @@
     font-weight: 600;
     line-height: 1.2;
     margin-bottom: 0.5rem;
+  }
+
+  /* Dark mode text colors */
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    color: #f9fafb;
   }
 }
 
@@ -28,7 +39,7 @@
   }
 
   .card-modern {
-    @apply bg-white rounded-xl shadow-lg border border-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
   }
 
   .btn-modern {
@@ -44,11 +55,11 @@
   }
 
   .input-modern {
-    @apply w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+    @apply w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white;
   }
 
   .form-label-modern {
-    @apply block text-sm font-medium text-gray-700 mb-2;
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
   }
 }
 
@@ -73,7 +84,7 @@
 
 /* Enhanced seat selection */
 .seat-selection-grid {
-  @apply grid grid-cols-8 gap-2 max-w-md mx-auto p-6 bg-white rounded-xl shadow-lg;
+  @apply grid grid-cols-8 gap-2 max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg;
 }
 
 .seat-button {
@@ -81,7 +92,7 @@
 }
 
 .seat-available {
-  @apply seat-button bg-gray-100 text-gray-700 hover:bg-primary-100 hover:text-primary-700;
+  @apply seat-button bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900 hover:text-primary-700 dark:hover:text-primary-300;
 }
 
 .seat-selected {
@@ -135,18 +146,32 @@
   }
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  body {
-    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-    color: #f9fafb;
-  }
-  
-  .card-modern {
-    @apply bg-gray-800 border-gray-700;
-  }
-  
-  .input-modern {
-    @apply bg-gray-700 border-gray-600 text-white;
-  }
+/* Dark mode transitions */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode specific styles */
+.dark .glass-effect {
+  background: rgba(31, 41, 55, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(75, 85, 99, 0.18);
+}
+
+.dark .skeleton {
+  @apply bg-gray-700;
+}
+
+/* Toast notifications dark mode */
+.dark .Toastify__toast {
+  background-color: #374151;
+  color: #f9fafb;
+}
+
+.dark .Toastify__toast-body {
+  color: #f9fafb;
+}
+
+.dark .Toastify__close-button {
+  color: #f9fafb;
 }
