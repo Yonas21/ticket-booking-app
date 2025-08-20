@@ -7,9 +7,9 @@ const SupportPage = () => {
 
   return (
     <div className="container slick-design py-5">
-      <h2 className="mb-4 text-center">{t('common.supportCenter')}</h2>
+      <h2 className="mb-4 mt-24 text-center text-gray-900 dark:text-white">{t('common.supportCenter')}</h2>
 
-      <div className="card mb-4 shadow-sm">
+      <div className="card mb-4 shadow-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
         <div className="card-header bg-primary text-white">
           <h5 className="mb-0">{t('common.faqs')}</h5>
         </div>
@@ -55,15 +55,15 @@ const SupportPage = () => {
         </div>
       </div>
 
-      <div className="card mb-4 shadow-sm">
+      <div className="card mb-4 shadow-sm bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
         <div className="card-header bg-primary text-white">
           <h5 className="mb-0">{t('common.contactInformation')}</h5>
         </div>
         <div className="card-body">
-          <p>{t('common.contactInfoText')}</p>
-          <p><strong>{t('common.email')}:</strong> support@busticket.com</p>
-          <p><strong>{t('common.phoneSupport')}:</strong> +1 (800) 123-4567</p>
-          <p className="text-muted"><small>{t('common.phoneSupportHours')}</small></p>
+          <p className="text-gray-700 dark:text-gray-300">{t('common.contactInfoText')}</p>
+          <p className="text-gray-700 dark:text-gray-300"><strong>{t('common.email')}:</strong> support@busticket.com</p>
+          <p className="text-gray-700 dark:text-gray-300"><strong>{t('common.phoneSupport')}:</strong> +1 (800) 123-4567</p>
+          <p className="text-muted dark:text-gray-400"><small>{t('common.phoneSupportHours')}</small></p>
           <Link to="/contact" className="btn btn-primary mt-3">{t('common.goToContactPage')}</Link>
         </div>
       </div>
