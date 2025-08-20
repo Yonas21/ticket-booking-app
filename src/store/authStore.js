@@ -15,9 +15,42 @@ const useAuthStore = create(
       setCurrency: (currency) => set({ currency }),
       setTheme: (theme) => set({ theme }), // Add theme setter
       
-      login: (userData, token) => set({ user: userData, token }),
+      login: async (email, password) => {
+        try {
+          const response = await apiLogin(email, password);
+          if (response.token) {
+            set({ user: response.user, token: response.token });
+            localStorage.setItem('token', response.token);
+            return true;
+          } else {
+            return false;
+          }
+        } catch (error) {
+          console.error('Login error:', error);
+          return false;
+        }
+      },
       
-      logout: () => set({ user: null, token: null }),
+      signup: async (name, email, password) => {
+        try {
+          const response = await apiSignup(name, email, password);
+          if (response.success) {
+            // For signup, we might want to automatically log the user in
+            // or redirect them to login page
+            return true;
+          } else {
+            return false;
+          }
+        } catch (error) {
+          console.error('Signup error:', error);
+          return false;
+        }
+      },
+      
+      logout: () => {
+        set({ user: null, token: null });
+        localStorage.removeItem('token');
+      },
       
       rehydrate: () => {
         // This will be called on app initialization
