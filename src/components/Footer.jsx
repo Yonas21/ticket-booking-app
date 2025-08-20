@@ -42,7 +42,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-gray-900 dark:bg-gray-950 text-white">
       {/* Main Footer Content */}
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -56,7 +56,7 @@ const Footer = () => {
           >
             <div className="mb-6">
               <h3 className="text-2xl font-bold text-white mb-4">BusTicket</h3>
-              <p className="text-gray-300 leading-relaxed">
+              <p className="text-gray-300 dark:text-gray-400 leading-relaxed">
                 {t('common.footerDescription')}
               </p>
             </div>
@@ -85,13 +85,13 @@ const Footer = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             viewport={{ once: true }}
           >
-            <h4 className="text-lg font-semibold mb-4">{t('common.company')}</h4>
+            <h4 className="text-lg font-semibold mb-4 text-white">{t('common.company')}</h4>
             <ul className="space-y-2">
               {footerLinks.company.map((link, index) => (
                 <li key={index}>
                   <Link
                     to={link.href}
-                    className="text-gray-300 hover:text-primary-400 transition-colors duration-200"
+                    className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200"
                   >
                     {link.name}
                   </Link>
@@ -107,13 +107,13 @@ const Footer = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <h4 className="text-lg font-semibold mb-4">{t('common.support')}</h4>
+            <h4 className="text-lg font-semibold mb-4 text-white">{t('common.support')}</h4>
             <ul className="space-y-2">
               {footerLinks.support.map((link, index) => (
                 <li key={index}>
                   <Link
                     to={link.href}
-                    className="text-gray-300 hover:text-primary-400 transition-colors duration-200"
+                    className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200"
                   >
                     {link.name}
                   </Link>
@@ -129,13 +129,13 @@ const Footer = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            <h4 className="text-lg font-semibold mb-4">{t('common.legal')}</h4>
+            <h4 className="text-lg font-semibold mb-4 text-white">{t('common.legal')}</h4>
             <ul className="space-y-2">
               {footerLinks.legal.map((link, index) => (
                 <li key={index}>
                   <Link
                     to={link.href}
-                    className="text-gray-300 hover:text-primary-400 transition-colors duration-200"
+                    className="text-gray-300 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200"
                   >
                     {link.name}
                   </Link>
@@ -154,15 +154,15 @@ const Footer = () => {
           className="mt-12 pt-8 border-t border-gray-700"
         >
           <div className="text-center">
-            <h4 className="text-xl font-semibold mb-4">{t('common.stayUpdated')}</h4>
-            <p className="text-gray-300 mb-6 max-w-md mx-auto">
+            <h4 className="text-xl font-semibold mb-4 text-white">{t('common.stayUpdated')}</h4>
+            <p className="text-gray-300 dark:text-gray-400 mb-6 max-w-md mx-auto">
               {t('common.newsletterDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <input
                 type="email"
                 placeholder={t('common.enterEmail')}
-                className="flex-1 px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white placeholder-gray-400"
+                className="flex-1 px-4 py-3 bg-gray-800 dark:bg-gray-700 border border-gray-600 dark:border-gray-500 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white placeholder-gray-400 dark:placeholder-gray-300"
               />
               <motion.button
                 className="px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors duration-200"
@@ -181,7 +181,7 @@ const Footer = () => {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             {/* Copyright */}
-            <div className="text-gray-400 text-sm">
+            <div className="text-gray-400 dark:text-gray-500 text-sm">
               © {currentYear} BusTicket. {t('common.allRightsReserved')}
             </div>
 
@@ -193,7 +193,7 @@ const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 bg-gray-800 rounded-lg hover:bg-primary-600 transition-colors duration-200"
+                  className="p-2 bg-gray-800 dark:bg-gray-700 rounded-lg hover:bg-primary-600 transition-colors duration-200"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   whileTap={{ scale: 0.9 }}
                   aria-label={social.label}
