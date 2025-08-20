@@ -1,3 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="30" viewBox="0 0 100 30">
-  <text x="50" y="20" font-family="Arial, sans-serif" font-size="20" fill="#007bff" text-anchor="middle">BusTicket</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="40" viewBox="0 0 120 40">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Bus Icon -->
+  <g transform="translate(5, 8)">
+    <!-- Bus body -->
+    <rect x="0" y="8" width="20" height="12" rx="2" fill="url(#logoGradient)" stroke="#1e40af" stroke-width="0.5"/>
+    
+    <!-- Bus windows -->
+    <rect x="2" y="10" width="4" height="3" rx="0.5" fill="#ffffff" opacity="0.9"/>
+    <rect x="7" y="10" width="4" height="3" rx="0.5" fill="#ffffff" opacity="0.9"/>
+    <rect x="12" y="10" width="4" height="3" rx="0.5" fill="#ffffff" opacity="0.9"/>
+    
+    <!-- Bus wheels -->
+    <circle cx="5" cy="20" r="2" fill="#374151"/>
+    <circle cx="15" cy="20" r="2" fill="#374151"/>
+    
+    <!-- Bus door -->
+    <rect x="8" y="12" width="4" height="8" rx="0.5" fill="#ffffff" opacity="0.8"/>
+    <line x1="10" y1="12" x2="10" y2="20" stroke="#374151" stroke-width="0.3"/>
+  </g>
+  
+  <!-- Ticket icon -->
+  <g transform="translate(30, 5)">
+    <!-- Ticket body -->
+    <rect x="0" y="0" width="25" height="15" rx="2" fill="url(#logoGradient)" stroke="#1e40af" stroke-width="0.5"/>
+    
+    <!-- Ticket perforations -->
+    <circle cx="8" cy="7.5" r="0.8" fill="#ffffff"/>
+    <circle cx="17" cy="7.5" r="0.8" fill="#ffffff"/>
+    
+    <!-- Ticket text lines -->
+    <rect x="2" y="3" width="8" height="1" rx="0.5" fill="#ffffff" opacity="0.9"/>
+    <rect x="2" y="5" width="6" height="1" rx="0.5" fill="#ffffff" opacity="0.7"/>
+    <rect x="2" y="7" width="10" height="1" rx="0.5" fill="#ffffff" opacity="0.9"/>
+    <rect x="2" y="9" width="5" height="1" rx="0.5" fill="#ffffff" opacity="0.7"/>
+    <rect x="2" y="11" width="7" height="1" rx="0.5" fill="#ffffff" opacity="0.9"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="60" y="25" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="600" fill="#1f2937" text-anchor="middle" class="dark:text-white">
+    BusTicket
+  </text>
 </svg>
