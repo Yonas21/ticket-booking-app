@@ -90,9 +90,11 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to create token", http.StatusInternalServerError)
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"token": tokenString, "name": user.Name})
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"token": tokenString,
+		"user":  user,
+	})
 }
 
 func SearchTripsHandler(w http.ResponseWriter, r *http.Request) {
