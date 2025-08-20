@@ -25,7 +25,7 @@ import i18n from './i18n';
 
 const Layout = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <Header />
       <main className="flex-1">
         <Outlet />
@@ -36,11 +36,21 @@ const Layout = () => {
 };
 
 function App() {
+  const { theme, rehydrate } = useAuthStore();
+  
   useEffect(() => {
     // Initialize auth store and apply theme
-    const { rehydrate } = useAuthStore.getState();
     rehydrate();
-  }, []);
+  }, [rehydrate]);
+
+  useEffect(() => {
+    // Apply theme to document root
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
 
   const handleLiveChatClick = () => {
     // Enhanced live chat with modern UI
