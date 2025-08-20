@@ -46,21 +46,21 @@ const PaymentPage = () => {
   }
 
   return (
-    <div className="container slick-design">
-      <h2>{t('common.completeYourPayment')}</h2>
-      <div className="card">
+    <div className="container slick-design mt-24">
+      <h2 className="text-gray-900 dark:text-white">{t('common.completeYourPayment')}</h2>
+      <div className="card bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
         <div className="card-body">
-          <h5 className="card-title">{t('common.bookingSummary')}</h5>
-          <p><strong>{t('common.trip')}:</strong> {bookingDetails.from} {t('common.to')} {bookingDetails.to}</p>
-          <p><strong>{t('common.date')}:</strong> {bookingDetails.date}</p>
-          <p><strong>{t('common.passengers')}:</strong> {bookingDetails.numberOfPassengers}</p>
-          <p><strong>{t('common.seats')}:</strong> {bookingDetails.selectedSeats.join(', ')}</p>
-          <h4><strong>{t('common.totalPrice')}:</strong> {getCurrencySymbol(currency)}{bookingDetails.price}</h4>
+          <h5 className="card-title text-gray-900 dark:text-white">{t('common.bookingSummary')}</h5>
+          <p className="text-gray-700 dark:text-gray-300"><strong>{t('common.trip')}:</strong> {bookingDetails.from} {t('common.to')} {bookingDetails.to}</p>
+          <p className="text-gray-700 dark:text-gray-300"><strong>{t('common.date')}:</strong> {bookingDetails.date}</p>
+          <p className="text-gray-700 dark:text-gray-300"><strong>{t('common.passengers')}:</strong> {bookingDetails.numberOfPassengers}</p>
+          <p className="text-gray-700 dark:text-gray-300"><strong>{t('common.seats')}:</strong> {bookingDetails.selectedSeats.join(', ')}</p>
+          <h4 className="text-gray-900 dark:text-white"><strong>{t('common.totalPrice')}:</strong> {getCurrencySymbol(currency)}{bookingDetails.price}</h4>
         </div>
       </div>
 
       <form onSubmit={handlePayment} className="mt-4">
-        <h5>{t('common.selectPaymentMethod')}</h5>
+        <h5 className="text-gray-900 dark:text-white">{t('common.selectPaymentMethod')}</h5>
         <div className="form-check">
           <input
             type="radio"
@@ -71,18 +71,18 @@ const PaymentPage = () => {
             onChange={() => setPaymentMethod('creditCard')}
             className="form-check-input"
           />
-          <label htmlFor="creditCard" className="form-check-label">{t('common.creditCard')}</label>
+          <label htmlFor="creditCard" className="form-check-label text-gray-700 dark:text-gray-300">{t('common.creditCard')}</label>
         </div>
         {/* Add other payment methods like PayPal, etc. here */}
 
         {paymentMethod === 'creditCard' && (
           <div className="mt-3">
             <div className="mb-3">
-              <label htmlFor="cardNumber" className="form-label">{t('common.cardNumber')}</label>
+              <label htmlFor="cardNumber" className="form-label text-gray-700 dark:text-gray-300">{t('common.cardNumber')}</label>
               <input
                 type="text"
                 id="cardNumber"
-                className="form-control"
+                className="form-control bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white"
                 value={cardDetails.cardNumber}
                 onChange={(e) => setCardDetails({ ...cardDetails, cardNumber: e.target.value })}
                 required
@@ -90,11 +90,11 @@ const PaymentPage = () => {
             </div>
             <div className="row">
               <div className="col-md-6 mb-3">
-                <label htmlFor="expiryDate" className="form-label">{t('common.expiryDate')}</label>
+                <label htmlFor="expiryDate" className="form-label text-gray-700 dark:text-gray-300">{t('common.expiryDate')}</label>
                 <input
                   type="text"
                   id="expiryDate"
-                  className="form-control"
+                  className="form-control bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white"
                   placeholder="MM/YY"
                   value={cardDetails.expiryDate}
                   onChange={(e) => setCardDetails({ ...cardDetails, expiryDate: e.target.value })}
@@ -102,11 +102,11 @@ const PaymentPage = () => {
                 />
               </div>
               <div className="col-md-6 mb-3">
-                <label htmlFor="cvv" className="form-label">{t('common.cvv')}</label>
+                <label htmlFor="cvv" className="form-label text-gray-700 dark:text-gray-300">{t('common.cvv')}</label>
                 <input
                   type="text"
                   id="cvv"
-                  className="form-control"
+                  className="form-control bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white"
                   value={cardDetails.cvv}
                   onChange={(e) => setCardDetails({ ...cardDetails, cvv: e.target.value })}
                   required
