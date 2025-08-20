@@ -9,6 +9,7 @@ import useAuthStore from '../store/authStore';
 import BusCard from '../components/BusCard';
 import { useTranslation } from 'react-i18next';
 import { ethiopianLocations, popularRoutes } from '../data/locations';
+import RouteMap from '../components/RouteMap';
 
 const locations = [...new Set(trips.flatMap(trip => [trip.from, trip.to]))];
 
@@ -79,7 +80,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen pt-20">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="container mx-auto px-4 py-16">
           <motion.div 
@@ -92,7 +93,7 @@ const HomePage = () => {
             <motion.div variants={itemVariants} className="space-y-8">
               <div className="space-y-4">
                 <motion.h1 
-                  className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight"
+                  className="text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
@@ -100,7 +101,7 @@ const HomePage = () => {
                   {t('common.bookYourBusTicket')}
                 </motion.h1>
                 <motion.p 
-                  className="text-xl text-gray-600 leading-relaxed"
+                  className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
@@ -118,25 +119,25 @@ const HomePage = () => {
                   <div className="p-2 bg-primary-100 rounded-lg">
                     <Bus className="w-5 h-5 text-primary-600" />
                   </div>
-                  <span className="text-sm font-medium text-gray-700">Modern Buses</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Modern Buses</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-primary-100 rounded-lg">
                     <Star className="w-5 h-5 text-primary-600" />
                   </div>
-                  <span className="text-sm font-medium text-gray-700">Best Prices</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Best Prices</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-primary-100 rounded-lg">
                     <Clock className="w-5 h-5 text-primary-600" />
                   </div>
-                  <span className="text-sm font-medium text-gray-700">24/7 Support</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">24/7 Support</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-primary-100 rounded-lg">
                     <Users className="w-5 h-5 text-primary-600" />
                   </div>
-                  <span className="text-sm font-medium text-gray-700">Safe Travel</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Safe Travel</span>
                 </div>
               </motion.div>
             </motion.div>
@@ -149,10 +150,10 @@ const HomePage = () => {
               <div className="card-modern p-8">
                 <div className="space-y-6">
                   <div className="text-center">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                       {t('common.findYourTrip')}
                     </h2>
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 dark:text-gray-300">
                       {t('common.searchDescription')}
                     </p>
                   </div>
@@ -276,7 +277,7 @@ const HomePage = () => {
 
       {/* Personalized Recommendations */}
       {user && personalizedRecommendations.length > 0 && (
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-gray-50 dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -285,10 +286,10 @@ const HomePage = () => {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                 {t('common.personalizedRecommendations')}
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                 {t('common.basedOnYourPreferences')}
               </p>
             </motion.div>
@@ -311,7 +312,7 @@ const HomePage = () => {
       )}
 
       {/* Popular Routes */}
-      <section className="py-16">
+      <section className="py-16 bg-gray-50 dark:bg-gray-800">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -320,10 +321,10 @@ const HomePage = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
               {t('common.popularRoutes')}
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               {t('common.discoverMostPopularRoutes')}
             </p>
           </motion.div>
@@ -347,10 +348,10 @@ const HomePage = () => {
                     <Bus className="w-6 h-6 text-primary-600" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                       {route.from} → {route.to}
                     </h3>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-gray-600 dark:text-gray-300 mb-4">
                       {t('common.findBestDeals')}
                     </p>
                     <motion.button
@@ -366,6 +367,31 @@ const HomePage = () => {
                 </div>
               </motion.div>
             ))}
+          </motion.div>
+
+          {/* Popular Routes Map */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="mt-12"
+          >
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                {t('common.exploreOurRoutes')}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                {t('common.discoverPopularDestinations')}
+              </p>
+            </div>
+            <div className="max-w-4xl mx-auto">
+              <RouteMap 
+                from="Addis Ababa" 
+                to="Bahir Dar" 
+                className="h-96 w-full"
+              />
+            </div>
           </motion.div>
         </div>
       </section>
