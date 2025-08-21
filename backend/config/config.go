@@ -2,20 +2,10 @@ package config
 
 import (
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/joho/godotenv"
-	"github.com/sirupsen/logrus"
 )
-
-type Config struct {
-	Server   ServerConfig
-	Database DatabaseConfig
-	JWT      JWTConfig
-	Redis    RedisConfig
-	Logging  LoggingConfig
-}
 
 type ServerConfig struct {
 	Port         string
@@ -30,69 +20,67 @@ type DatabaseConfig struct {
 	Port     string
 	User     string
 	Password string
-	DBName   string
+	Name     string
 	SSLMode  string
 }
 
 type JWTConfig struct {
-	SecretKey     string
-	Expiration    time.Duration
-	RefreshSecret string
-	RefreshExp    time.Duration
+	SecretKey  string
+	Expiration time.Duration
 }
 
-type RedisConfig struct {
-	Host     string
-	Port     string
-	Password string
-	DB       int
+type CorsConfig struct {
+	AllowedOrigins []string
+	AllowedMethods []string
+	AllowedHeaders []string
 }
 
-type LoggingConfig struct {
-	Level  string
-	Format string
+type AppConfig struct {
+	Server   ServerConfig
+	Database DatabaseConfig
+	JWT      JWTConfig
+	CORS     CorsConfig
+	Environment string
 }
 
-var AppConfig *Config
+var GlobalConfig *AppConfig
 
 func LoadConfig() error {
 	// Load .env file if it exists
-	if err := godotenv.Load(); err != nil {
-		logrus.Warn("No .env file found, using environment variables")
-	}
+	godotenv.Load()
 
-	AppConfig = &Config{
+	// Set default values
+	GlobalConfig = &AppConfig{
 		Server: ServerConfig{
 			Port:         getEnv("PORT", "8080"),
 			Host:         getEnv("HOST", "localhost"),
-			ReadTimeout:  getDurationEnv("READ_TIMEOUT", 15*time.Second),
-			WriteTimeout: getDurationEnv("WRITE_TIMEOUT", 15*time.Second),
+			ReadTimeout:  getDurationEnv("READ_TIMEOUT", 30*time.Second),
+			WriteTimeout: getDurationEnv("WRITE_TIMEOUT", 30*time.Second),
 			IdleTimeout:  getDurationEnv("IDLE_TIMEOUT", 60*time.Second),
 		},
 		Database: DatabaseConfig{
 			Host:     getEnv("DB_HOST", "localhost"),
 			Port:     getEnv("DB_PORT", "5432"),
-			User:     getEnv("DB_USER", "macbookairm2"),
+			User:     getEnv("DB_USER", "postgres"),
 			Password: getEnv("DB_PASSWORD", ""),
-			DBName:   getEnv("DB_NAME", "ticket_booking"),
+			Name:     getEnv("DB_NAME", "bus_booking"),
 			SSLMode:  getEnv("DB_SSLMODE", "disable"),
 		},
 		JWT: JWTConfig{
-			SecretKey:     getEnv("JWT_SECRET", "your-secret-key-change-in-production"),
-			Expiration:    getDurationEnv("JWT_EXPIRATION", 24*time.Hour),
-			RefreshSecret: getEnv("JWT_REFRESH_SECRET", "your-refresh-secret-key-change-in-production"),
-			RefreshExp:    getDurationEnv("JWT_REFRESH_EXPIRATION", 7*24*time.Hour),
+			SecretKey:  getEnv("JWT_SECRET", "your-super-secret-jwt-key-change-in-production"),
+			Expiration: getDurationEnv("JWT_EXPIRATION", 24*time.Hour),
 		},
-		Redis: RedisConfig{
-			Host:     getEnv("REDIS_HOST", "localhost"),
-			Port:     getEnv("REDIS_PORT", "6379"),
-			Password: getEnv("REDIS_PASSWORD", ""),
-			DB:       getIntEnv("REDIS_DB", 0),
+		CORS: CorsConfig{
+			AllowedOrigins: getStringSliceEnv("CORS_ALLOWED_ORIGINS", []string{"http://localhost:3000", "http://localhost:5173"}),
+			AllowedMethods: getStringSliceEnv("CORS_ALLOWED_METHODS", []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
+			AllowedHeaders: getStringSliceEnv("CORS_ALLOWED_HEADERS", []string{"Authorization", "Content-Type", "X-Requested-With"}),
 		},
-		Logging: LoggingConfig{
-			Level:  getEnv("LOG_LEVEL", "info"),
-			Format: getEnv("LOG_FORMAT", "json"),
-		},
+		Environment: getEnv("ENVIRONMENT", "development"),
+	}
+
+	// Validate required environment variables
+	if err := validateConfig(); err != nil {
+		return err
 	}
 
 	return nil
@@ -101,15 +89,6 @@ func LoadConfig() error {
 func getEnv(key, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {
 		return value
-	}
-	return defaultValue
-}
-
-func getIntEnv(key string, defaultValue int) int {
-	if value := os.Getenv(key); value != "" {
-		if intValue, err := strconv.Atoi(value); err == nil {
-			return intValue
-		}
 	}
 	return defaultValue
 }
@@ -123,22 +102,44 @@ func getDurationEnv(key string, defaultValue time.Duration) time.Duration {
 	return defaultValue
 }
 
-// GetDSN returns the database connection string
-func (c *Config) GetDSN() string {
-	dsn := "host=" + c.Database.Host +
-		" port=" + c.Database.Port +
-		" user=" + c.Database.User +
-		" dbname=" + c.Database.DBName +
-		" sslmode=" + c.Database.SSLMode
+func getStringSliceEnv(key string, defaultValue []string) []string {
+	if value := os.Getenv(key); value != "" {
+		// Simple comma-separated values parsing
+		// In production, you might want more sophisticated parsing
+		return []string{value}
+	}
+	return defaultValue
+}
 
-	if c.Database.Password != "" {
-		dsn += " password=" + c.Database.Password
+func validateConfig() error {
+	// Validate JWT secret
+	if GlobalConfig.JWT.SecretKey == "your-super-secret-jwt-key-change-in-production" {
+		// Log warning in development
+		if GlobalConfig.Environment == "development" {
+			println("WARNING: Using default JWT secret. Set JWT_SECRET environment variable in production.")
+		}
 	}
 
-	return dsn
+	// Validate database password
+	if GlobalConfig.Database.Password == "" {
+		println("WARNING: Database password not set. Set DB_PASSWORD environment variable.")
+	}
+
+	return nil
 }
 
-// GetRedisAddr returns the Redis connection address
-func (c *Config) GetRedisAddr() string {
-	return c.Redis.Host + ":" + c.Redis.Port
+// GetDatabaseURL returns the database connection string
+func GetDatabaseURL() string {
+	return "postgres://" + GlobalConfig.Database.User + ":" + GlobalConfig.Database.Password + "@" + GlobalConfig.Database.Host + ":" + GlobalConfig.Database.Port + "/" + GlobalConfig.Database.Name + "?sslmode=" + GlobalConfig.Database.SSLMode
 }
+
+// IsProduction returns true if the environment is production
+func IsProduction() bool {
+	return GlobalConfig.Environment == "production"
+}
+
+// IsDevelopment returns true if the environment is development
+func IsDevelopment() bool {
+	return GlobalConfig.Environment == "development"
+}
+
