@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Globe, DollarSign, User, LogOut, Settings, Sun, Moon } from 'lucide-react';
 import useAuthStore from '../store/authStore';
-import logoUrl from '../assets/logo.svg';
+import Logo from './Logo';
 import { useTranslation } from 'react-i18next';
 import CurrencySelector from './CurrencySelector';
 
@@ -58,13 +58,7 @@ const Header = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Link 
-              to="/" 
-              className="flex items-center space-x-2 text-2xl font-bold text-primary-600 dark:text-primary-400"
-              aria-label={t('common.busTicketBookingHome')}
-            >
-              <img src={logoUrl} alt={t('common.busTicketLogo')} className="h-10 w-auto" />
-            </Link>
+            <Logo size="default" linkTo="/" />
           </motion.div>
 
           {/* Desktop Navigation */}
