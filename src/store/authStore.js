@@ -34,13 +34,13 @@ const useAuthStore = create(
       signup: async (name, email, password) => {
         try {
           const response = await apiSignup(name, email, password);
-          if (response.success) {
-            // For signup, we might want to automatically log the user in
-            // or redirect them to login page
-            return true;
-          } else {
-            return false;
-          }
+          if (response.message === "User registered successfully") {
+				// For signup, we might want to automatically log the user in
+				// or redirect them to login page
+				return true;
+			} else {
+				return false;
+			}
         } catch (error) {
           console.error('Signup error:', error);
           return false;
