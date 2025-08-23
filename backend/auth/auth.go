@@ -22,7 +22,7 @@ func Middleware(next http.Handler) http.Handler {
         claims := &jwt.StandardClaims{}
 
         token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-            return []byte(config.AppConfig.JWT.SecretKey), nil
+            return []byte(config.GlobalConfig.JWT.SecretKey), nil
         })
 
         if err != nil {

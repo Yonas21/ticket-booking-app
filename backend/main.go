@@ -73,16 +73,16 @@ func main() {
 
 	// Create HTTP server
 	server := &http.Server{
-		Addr:         ":" + config.AppConfig.Server.Port,
+		Addr:         ":" + config.GlobalConfig.Server.Port,
 		Handler:      c.Handler(r),
-		ReadTimeout:  config.AppConfig.Server.ReadTimeout,
-		WriteTimeout: config.AppConfig.Server.WriteTimeout,
-		IdleTimeout:  config.AppConfig.Server.IdleTimeout,
+		ReadTimeout:  config.GlobalConfig.Server.ReadTimeout,
+		WriteTimeout: config.GlobalConfig.Server.WriteTimeout,
+		IdleTimeout:  config.GlobalConfig.Server.IdleTimeout,
 	}
 
 	// Start server in a goroutine
 	go func() {
-		logger.Infof("Server starting on port %s...", config.AppConfig.Server.Port)
+		logger.Infof("Server starting on port %s...", config.GlobalConfig.Server.Port)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			logger.Fatal("Server failed to start:", err)
 		}

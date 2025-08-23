@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Clock, MapPin, Bus, Users, Tag, User, Mail } from 'lucide-react';
+import { formatDate, formatTime } from '../utils/dateUtils';
+import { formatCurrency, calculateTotalPrice, convertCurrency, getCurrencySymbol } from '../utils/currencyUtils';
 
 // Mock promo codes
 const mockPromoCodes = [
@@ -29,15 +31,7 @@ const BookingPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const getCurrencySymbol = (currencyCode) => {
-    switch (currencyCode) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'GBP': return '£';
-      case 'ETB': return 'ብር';
-      default: return '$';
-    }
-  };
+
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -62,10 +56,17 @@ const BookingPage = () => {
     });
   };
 
-  const calculateTotalPrice = () => {
-    let basePrice = trip ? trip.price * numberOfPassengers : 0;
-    let finalPrice = basePrice - discountAmount;
-    return Math.max(0, finalPrice).toFixed(2);
+  const getTotalPrice = () => {
+    if (!trip) return 0;
+    
+    const totalCalculation = calculateTotalPrice(
+      trip.originalPriceUSD,
+      currency,
+      numberOfPassengers,
+      discountAmount
+    );
+    
+    return totalCalculation.totalAfterDiscount;
   };
 
   const handleApplyPromo = () => {
@@ -79,8 +80,9 @@ const BookingPage = () => {
       } else if (foundPromo.type === 'flat') {
         calculatedDiscount = foundPromo.discount;
       }
-      setDiscountAmount(parseFloat((calculatedDiscount * (currency === 'USD' ? 1 : (currency === 'EUR' ? 0.92 : 0.79))).toFixed(2)));
-      setPromoMessage(t('common.promoCodeApplied', { symbol: getCurrencySymbol(currency), amount: calculatedDiscount.toFixed(2) }));
+      const convertedDiscount = convertCurrency(calculatedDiscount, 'USD', currency);
+      setDiscountAmount(convertedDiscount);
+      setPromoMessage(t('common.promoCodeApplied', { symbol: getCurrencySymbol(currency), amount: formatCurrency(convertedDiscount, currency) }));
     } else {
       setDiscountAmount(0);
       setPromoMessage(t('common.invalidPromoCode'));
@@ -118,7 +120,7 @@ const BookingPage = () => {
         to: trip.to,
         date: trip.date,
         departureTime: trip.departureTime,
-        price: calculateTotalPrice(),
+        price: getTotalPrice(),
         passengerName: user ? user.name : passengerName,
         passengerEmail: user ? user.email : passengerEmail,
         numberOfPassengers: numberOfPassengers,
@@ -131,15 +133,7 @@ const BookingPage = () => {
     }
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
-  };
+
 
   if (loading) {
     return (
@@ -166,7 +160,7 @@ const BookingPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 mt-16">
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div
@@ -223,7 +217,7 @@ const BookingPage = () => {
                   <MapPin size={20} className="text-red-500" />
                   <div>
                     <p className="text-sm text-gray-600">{t('common.departure')}</p>
-                    <p className="font-medium">{trip.departureTime} {t('common.from')} {trip.from}</p>
+                    <p className="font-medium">{formatTime(trip.departureTime)} {t('common.from')} {trip.from}</p>
                   </div>
                 </div>
                 
@@ -231,7 +225,7 @@ const BookingPage = () => {
                   <MapPin size={20} className="text-green-500" />
                   <div>
                     <p className="text-sm text-gray-600">{t('common.arrival')}</p>
-                    <p className="font-medium">{trip.arrivalTime} {t('common.to')} {trip.to}</p>
+                    <p className="font-medium">{formatTime(trip.arrivalTime)} {t('common.to')} {trip.to}</p>
                   </div>
                 </div>
               </div>
@@ -427,14 +421,14 @@ const BookingPage = () => {
                 <div className="flex justify-between">
                   <span className="text-gray-600">{t('common.basePrice')}</span>
                   <span className="font-medium">
-                    {getCurrencySymbol(currency)}{(trip.originalPriceUSD * numberOfPassengers).toFixed(2)}
+                    {formatCurrency(trip.originalPriceUSD * numberOfPassengers, currency)}
                   </span>
                 </div>
                 
                 {discountAmount > 0 && (
                   <div className="flex justify-between text-green-600">
                     <span>{t('common.discount')}</span>
-                    <span>-{getCurrencySymbol(currency)}{discountAmount.toFixed(2)}</span>
+                    <span>-{formatCurrency(discountAmount, currency)}</span>
                   </div>
                 )}
                 
@@ -442,7 +436,7 @@ const BookingPage = () => {
                   <div className="flex justify-between text-lg font-semibold">
                     <span>{t('common.totalPrice')}</span>
                     <span className="text-blue-600">
-                      {getCurrencySymbol(currency)}{calculateTotalPrice()}
+                      {formatCurrency(getTotalPrice(), currency)}
                     </span>
                   </div>
                 </div>

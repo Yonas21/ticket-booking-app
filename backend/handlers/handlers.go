@@ -78,14 +78,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create token
-	expirationTime := time.Now().Add(config.AppConfig.JWT.Expiration)
+	expirationTime := time.Now().Add(config.GlobalConfig.JWT.Expiration)
 	claims := &jwt.StandardClaims{
 		Subject:   user.Email,
 		ExpiresAt: expirationTime.Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString([]byte(config.AppConfig.JWT.SecretKey))
+	tokenString, err := token.SignedString([]byte(config.GlobalConfig.JWT.SecretKey))
 	if err != nil {
 		http.Error(w, "Failed to create token", http.StatusInternalServerError)
 		return

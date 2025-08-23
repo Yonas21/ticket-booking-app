@@ -5,6 +5,7 @@ import { Menu, X, Globe, DollarSign, User, LogOut, Settings, Sun, Moon } from 'l
 import useAuthStore from '../store/authStore';
 import logoUrl from '../assets/logo.svg';
 import { useTranslation } from 'react-i18next';
+import CurrencySelector from './CurrencySelector';
 
 const Header = () => {
   const { user, logout, currency, setCurrency, theme, toggleTheme } = useAuthStore();
@@ -21,9 +22,7 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleCurrencyChange = (e) => {
-    setCurrency(e.target.value);
-  };
+
 
   const handleLanguageChange = (e) => {
     i18n.changeLanguage(e.target.value);
@@ -131,20 +130,7 @@ const Header = () => {
             </motion.button>
 
             {/* Currency Selector */}
-            <div className="relative">
-              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <select
-                className="pl-10 pr-8 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none cursor-pointer"
-                value={currency}
-                onChange={handleCurrencyChange}
-                aria-label={t('common.selectCurrency')}
-              >
-                <option value="USD">💵 USD</option>
-                <option value="EUR">💶 EUR</option>
-                <option value="GBP">💷 GBP</option>
-                <option value="ETB">🇪🇹 ETB</option>
-              </select>
-            </div>
+            <CurrencySelector showLabel={false} className="w-32" />
 
             {/* Auth Section */}
             {user ? (
@@ -268,19 +254,7 @@ const Header = () => {
                         <option value="am">🇪🇹 አማርኛ</option>
                       </select>
                     </div>
-                    <div className="relative">
-                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                      <select
-                        className="w-full pl-10 pr-8 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                        value={currency}
-                        onChange={handleCurrencyChange}
-                      >
-                        <option value="USD">💵 USD</option>
-                        <option value="EUR">💶 EUR</option>
-                        <option value="GBP">💷 GBP</option>
-                        <option value="ETB">🇪🇹 ETB</option>
-                      </select>
-                    </div>
+                    <CurrencySelector showLabel={false} />
                   </div>
 
                   {/* Mobile Auth */}

@@ -17,7 +17,7 @@ var DB *sql.DB
 
 func InitDB() error {
 	// Use the new configuration structure
-	connStr := config.AppConfig.GetDSN()
+	connStr := config.GetDatabaseURL()
 
 	var err error
 	DB, err = sql.Open("postgres", connStr)
@@ -30,7 +30,7 @@ func InitDB() error {
 		return fmt.Errorf("failed to ping database: %v", err)
 	}
 
-	log.Printf("Successfully connected to database: %s", config.AppConfig.Database.DBName)
+	log.Printf("Successfully connected to database: %s", config.GlobalConfig.Database.Name)
 	return nil
 }
 

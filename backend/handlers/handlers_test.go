@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"ticket-booking-app/backend/auth"
-	"ticket-booking-app/backend/config"
 	"ticket-booking-app/backend/database"
 	"ticket-booking-app/backend/handlers"
 	"ticket-booking-app/backend/models"
@@ -29,7 +28,7 @@ func generateTestToken(email string) (string, error) {
 		ExpiresAt: expirationTime.Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(config.JWTKey)
+	return token.SignedString([]byte("test-secret-key"))
 }
 
 func setupTestDB() {
@@ -232,7 +231,8 @@ func TestSearchTripsHandler(t *testing.T) {
 		From:           "Addis Ababa",
 		To:             "Adama",
 		Date:           "2025-08-20",
-		Time:           "10:00:00",
+		DepartureTime:  "10:00:00",
+		ArrivalTime:    "11:30:00",
 		Price:          100.0,
 		SeatsAvailable: 50,
 		Seats:          []string{"A1", "A2", "A3"},
@@ -241,7 +241,8 @@ func TestSearchTripsHandler(t *testing.T) {
 		From:           "Addis Ababa",
 		To:             "Hawassa",
 		Date:           "2025-08-20",
-		Time:           "12:00:00",
+		DepartureTime:  "12:00:00",
+		ArrivalTime:    "14:30:00",
 		Price:          200.0,
 		SeatsAvailable: 40,
 		Seats:          []string{"B1", "B2", "B3"},
@@ -250,7 +251,8 @@ func TestSearchTripsHandler(t *testing.T) {
 		From:           "Adama",
 		To:             "Addis Ababa",
 		Date:           "2025-08-21",
-		Time:           "14:00:00",
+		DepartureTime:  "14:00:00",
+		ArrivalTime:    "15:30:00",
 		Price:          150.0,
 		SeatsAvailable: 30,
 		Seats:          []string{"C1", "C2", "C3"},
@@ -340,7 +342,8 @@ func TestGetTripByIDHandler(t *testing.T) {
 		From:           "Addis Ababa",
 		To:             "Adama",
 		Date:           "2025-08-20",
-		Time:           "10:00:00",
+		DepartureTime:  "10:00:00",
+		ArrivalTime:    "11:30:00",
 		Price:          100.0,
 		SeatsAvailable: 50,
 		Seats:          []string{"A1", "A2", "A3"},
@@ -411,7 +414,8 @@ func TestCreateBookingHandler(t *testing.T) {
 		From:           "Addis Ababa",
 		To:             "Adama",
 		Date:           "2025-09-01",
-		Time:           "10:00:00",
+		DepartureTime:  "10:00:00",
+		ArrivalTime:    "11:30:00",
 		Price:          100.0,
 		SeatsAvailable: 3,
 		Seats:          []string{"A1", "A2", "A3", "A4", "A5"},
@@ -526,7 +530,8 @@ func TestGetProfileHandler(t *testing.T) {
 		From:           "Addis Ababa",
 		To:             "Adama",
 		Date:           "2025-09-01",
-		Time:           "10:00:00",
+		DepartureTime:  "10:00:00",
+		ArrivalTime:    "11:30:00",
 		Price:          100.0,
 		SeatsAvailable: 50,
 		Seats:          []string{"A1", "A2"},

@@ -5,6 +5,8 @@ import { getProfile } from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { formatBookingDate, formatTime } from '../utils/dateUtils';
+import { formatCurrency } from '../utils/currencyUtils';
 
 const ProfilePage = () => {
   const { user, setUser, currency } = useAuthStore();
@@ -15,15 +17,7 @@ const ProfilePage = () => {
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const getCurrencySymbol = (currencyCode) => {
-    switch (currencyCode) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'GBP': return '£';
-      case 'ETB': return 'ETB';
-      default: return '$';
-    }
-  };
+
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -62,15 +56,28 @@ const ProfilePage = () => {
   const pastTrips = user.bookings.filter(booking => new Date(booking.date) < now);
 
   const handleSetReminder = (booking) => {
-    toast.info(t('common.reminderSet', { from: booking.from, to: booking.to, date: booking.date, time: booking.departureTime }));
+    toast.info(t('common.reminderSet', { 
+      from: booking.from, 
+      to: booking.to, 
+      date: formatBookingDate(booking.date), 
+      time: formatTime(booking.departureTime) 
+    }));
   };
 
   const handleCheckStatus = (booking) => {
     const delayChance = Math.random();
     if (delayChance < 0.3) { // 30% chance of delay
-      toast.warn(t('common.tripDelayed', { from: booking.from, to: booking.to, date: booking.date }));
+      toast.warn(t('common.tripDelayed', { 
+        from: booking.from, 
+        to: booking.to, 
+        date: formatBookingDate(booking.date) 
+      }));
     } else {
-      toast.success(t('common.tripOnTime', { from: booking.from, to: booking.to, date: booking.date }));
+      toast.success(t('common.tripOnTime', { 
+        from: booking.from, 
+        to: booking.to, 
+        date: formatBookingDate(booking.date) 
+      }));
     }
   };
 
@@ -105,11 +112,11 @@ const ProfilePage = () => {
     <div className="card mb-3 shadow-sm" key={booking.id}>
       <div className="card-body">
         <h5 className="card-title">{booking.from} {t('common.to')} {booking.to}</h5>
-        <p className="card-text"><strong>{t('common.date')}:</strong> {booking.date}</p>
-        <p className="card-text"><strong>{t('common.departure')}:</strong> {booking.departureTime}</p>
+        <p className="card-text"><strong>{t('common.date')}:</strong> {formatBookingDate(booking.date)}</p>
+        <p className="card-text"><strong>{t('common.departure')}:</strong> {formatTime(booking.departureTime)}</p>
         <p className="card-text"><strong>{t('common.selectedSeats')}:</strong> {Array.isArray(booking.selectedSeats) ? booking.selectedSeats.join(', ') : booking.selectedSeat}</p>
         <p className="card-text"><strong>{t('common.numberOfPassengers')}:</strong> {booking.numberOfPassengers || 1}</p>
-        <p className="card-text"><strong>{t('common.totalPrice')}:</strong> {getCurrencySymbol(currency)}{booking.price}</p>
+        <p className="card-text"><strong>{t('common.totalPrice')}:</strong> {formatCurrency(booking.price, currency)}</p>
         <div className="mt-3">
           <Link
             to={'/booking-confirmation'}

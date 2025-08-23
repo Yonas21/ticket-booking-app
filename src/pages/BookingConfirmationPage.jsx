@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 import useAuthStore from '../store/authStore';
 import RouteMap from '../components/RouteMap';
 import { sendBookingConfirmationEmail, sendTicketEmail } from '../services/emailService';
+import { formatDate, formatTime } from '../utils/dateUtils';
+import { formatCurrency } from '../utils/currencyUtils';
 
 const BookingConfirmationPage = () => {
   const { currency } = useAuthStore();
@@ -15,15 +17,7 @@ const BookingConfirmationPage = () => {
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
 
-  const getCurrencySymbol = (currencyCode) => {
-    switch (currencyCode) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'GBP': return '£';
-      case 'ETB': return t('common.currencySymbolETB');
-      default: return '$';
-    }
-  };
+
 
   if (!bookingDetails) {
     return (
@@ -94,12 +88,12 @@ const BookingConfirmationPage = () => {
                 <div className="col-md-6">
                   <p className="mb-1 text-gray-700 dark:text-gray-300"><strong>{t('common.from')}:</strong> {bookingDetails.from}</p>
                   <p className="mb-1 text-gray-700 dark:text-gray-300"><strong>{t('common.to')}:</strong> {bookingDetails.to}</p>
-                  <p className="mb-1 text-gray-700 dark:text-gray-300"><strong>{t('common.date')}:</strong> {bookingDetails.date}</p>
-                  <p className="mb-1 text-gray-700 dark:text-gray-300"><strong>{t('common.departureTime')}:</strong> {bookingDetails.departureTime}</p>
+                  <p className="mb-1 text-gray-700 dark:text-gray-300"><strong>{t('common.date')}:</strong> {formatDate(bookingDetails.date, 'full')}</p>
+                  <p className="mb-1 text-gray-700 dark:text-gray-300"><strong>{t('common.departureTime')}:</strong> {formatTime(bookingDetails.departureTime)}</p>
                 </div>
                 <div className="col-md-6">
                   <p className="mb-1 text-gray-700 dark:text-gray-300"><strong>{t('common.bookingId')}:</strong> {bookingDetails.id}</p>
-                  <p className="mb-1 text-gray-700 dark:text-gray-300"><strong>{t('common.totalPrice')}:</strong> {getCurrencySymbol(currency)}{bookingDetails.price}</p>
+                  <p className="mb-1 text-gray-700 dark:text-gray-300"><strong>{t('common.totalPrice')}:</strong> {formatCurrency(bookingDetails.price, currency)}</p>
                   <p className="mb-1 text-gray-700 dark:text-gray-300"><strong>{t('common.numberOfPassengers')}:</strong> {bookingDetails.numberOfPassengers || 1}</p>
                   <p className="mb-1 text-gray-700 dark:text-gray-300"><strong>{t('common.selectedSeats')}:</strong> {Array.isArray(bookingDetails.selectedSeats) ? bookingDetails.selectedSeats.join(', ') : bookingDetails.selectedSeat}</p>
                 </div>
