@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import useAuthStore from '../store/authStore';
+import { formatDate } from '../utils/dateUtils';
+import { formatCurrency } from '../utils/currencyUtils';
 
 const PaymentPage = () => {
   const { state } = useLocation();
@@ -11,15 +13,7 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const { currency } = useAuthStore();
 
-  const getCurrencySymbol = (currencyCode) => {
-    switch (currencyCode) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'GBP': return '£';
-      case 'ETB': return t('common.currencySymbolETB');
-      default: return '';
-    }
-  };
+
 
   const [paymentMethod, setPaymentMethod] = useState('creditCard');
   const [cardDetails, setCardDetails] = useState({
@@ -52,10 +46,10 @@ const PaymentPage = () => {
         <div className="card-body">
           <h5 className="card-title text-gray-900 dark:text-white">{t('common.bookingSummary')}</h5>
           <p className="text-gray-700 dark:text-gray-300"><strong>{t('common.trip')}:</strong> {bookingDetails.from} {t('common.to')} {bookingDetails.to}</p>
-          <p className="text-gray-700 dark:text-gray-300"><strong>{t('common.date')}:</strong> {bookingDetails.date}</p>
+          <p className="text-gray-700 dark:text-gray-300"><strong>{t('common.date')}:</strong> {formatDate(bookingDetails.date, 'full')}</p>
           <p className="text-gray-700 dark:text-gray-300"><strong>{t('common.passengers')}:</strong> {bookingDetails.numberOfPassengers}</p>
           <p className="text-gray-700 dark:text-gray-300"><strong>{t('common.seats')}:</strong> {bookingDetails.selectedSeats.join(', ')}</p>
-          <h4 className="text-gray-900 dark:text-white"><strong>{t('common.totalPrice')}:</strong> {getCurrencySymbol(currency)}{bookingDetails.price}</h4>
+          <h4 className="text-gray-900 dark:text-white"><strong>{t('common.totalPrice')}:</strong> {formatCurrency(bookingDetails.price, currency)}</h4>
         </div>
       </div>
 
