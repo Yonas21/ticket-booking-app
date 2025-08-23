@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
+import { HelmetProvider } from 'react-helmet-async';
 import useAuthStore from './store/authStore';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -66,25 +67,26 @@ function App() {
   };
 
   return (
-    <I18nextProvider i18n={i18n}>
-      <Router>
-        <ErrorBoundary>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<HomePage />} />
-              <Route path="search" element={<SearchResultsPage />} />
-              <Route path="login" element={<LoginPage />} />
-              <Route path="signup" element={<SignUpPage />} />
-              <Route path="booking/:id" element={<BookingPage />} />
-              <Route path="profile" element={<ProfilePage />} />
-              <Route path="about" element={<AboutPage />} />
-              <Route path="contact" element={<ContactPage />} />
-              <Route path="booking-confirmation" element={<BookingConfirmationPage />} />
-              <Route path="support" element={<SupportPage />} />
-              <Route path="payment" element={<PaymentPage />} />
-            </Route>
-          </Routes>
-        </ErrorBoundary>
+    <HelmetProvider>
+      <I18nextProvider i18n={i18n}>
+        <Router>
+          <ErrorBoundary>
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<HomePage />} />
+                <Route path="search" element={<SearchResultsPage />} />
+                <Route path="login" element={<LoginPage />} />
+                <Route path="signup" element={<SignUpPage />} />
+                <Route path="booking/:id" element={<BookingPage />} />
+                <Route path="profile" element={<ProfilePage />} />
+                <Route path="about" element={<AboutPage />} />
+                <Route path="contact" element={<ContactPage />} />
+                <Route path="booking-confirmation" element={<BookingConfirmationPage />} />
+                <Route path="support" element={<SupportPage />} />
+                <Route path="payment" element={<PaymentPage />} />
+              </Route>
+            </Routes>
+          </ErrorBoundary>
 
         {/* Enhanced Live Chat Button */}
         <motion.button
