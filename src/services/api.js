@@ -1,17 +1,7 @@
 const API_URL = 'http://localhost:8080/api';
 
-// Mock exchange rates (USD as base)
-const exchangeRates = {
-  'USD': 1,
-  'EUR': 0.92,
-  'GBP': 0.79,
-  'ETB': 140.50,
-};
-
-const getConvertedPrice = (priceUSD, targetCurrency) => {
-  const rate = exchangeRates[targetCurrency] || 1;
-  return (priceUSD * rate).toFixed(2);
-};
+// Import currency utilities
+import { convertCurrency, formatCurrency } from '../utils/currencyUtils';
 
 // Import trip data for fallback
 import tripsData from '../data/trips.json';
@@ -30,10 +20,12 @@ export const searchTrips = async (from, to, date, flexibleDateRange, currency = 
     // Convert prices to target currency
     return results.map(trip => {
       const priceUSD = parseFloat(trip.price);
+      const convertedPrice = convertCurrency(priceUSD, 'USD', currency);
       return {
         ...trip,
-        price: getConvertedPrice(priceUSD, currency),
+        price: convertedPrice,
         originalPriceUSD: priceUSD,
+        formattedPrice: formatCurrency(convertedPrice, currency),
       };
     });
   } catch (error) {
@@ -69,11 +61,13 @@ export const searchTrips = async (from, to, date, flexibleDateRange, currency = 
       const basePriceUSD = parseFloat(trip.price);
       const priceVariation = 1 + (Math.random() * 0.2 - 0.1); // ±10% variation
       const adjustedPriceUSD = basePriceUSD * priceVariation;
+      const convertedPrice = convertCurrency(adjustedPriceUSD, 'USD', currency);
       
       return {
         ...trip,
-        price: getConvertedPrice(adjustedPriceUSD, currency),
+        price: convertedPrice,
         originalPriceUSD: adjustedPriceUSD,
+        formattedPrice: formatCurrency(convertedPrice, currency),
         seatsAvailable: Math.max(1, trip.seatsAvailable - Math.floor(Math.random() * 10)), // Simulate some seats taken
       };
     });
@@ -112,8 +106,10 @@ export const getTripById = async (id, currency = 'ETB') => {
       simulatedTrip.seatsAvailable = availableSeats.length;
       simulatedTrip.seats = availableSeats;
       simulatedTrip.takenSeats = takenSeats;
-      simulatedTrip.price = getConvertedPrice(simulatedTrip.price, currency);
+      const convertedPrice = convertCurrency(simulatedTrip.price, 'USD', currency);
+      simulatedTrip.price = convertedPrice;
       simulatedTrip.originalPriceUSD = trip.price;
+      simulatedTrip.formattedPrice = formatCurrency(convertedPrice, currency);
 
       return simulatedTrip;
     }
@@ -142,8 +138,10 @@ export const getTripById = async (id, currency = 'ETB') => {
       simulatedTrip.seatsAvailable = availableSeats.length;
       simulatedTrip.seats = availableSeats;
       simulatedTrip.takenSeats = takenSeats;
-      simulatedTrip.price = getConvertedPrice(simulatedTrip.price, currency);
+      const convertedPrice = convertCurrency(simulatedTrip.price, 'USD', currency);
+      simulatedTrip.price = convertedPrice;
       simulatedTrip.originalPriceUSD = trip.price;
+      simulatedTrip.formattedPrice = formatCurrency(convertedPrice, currency);
 
       return simulatedTrip;
     }
