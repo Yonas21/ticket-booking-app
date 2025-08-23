@@ -6,6 +6,9 @@ import tripsData from '../data/trips.json';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Filter, Search, Clock, DollarSign, Wifi, Zap, Coffee } from 'lucide-react';
+import { formatDate, formatTripDate } from '../utils/dateUtils';
+import { formatCurrency } from '../utils/currencyUtils';
+import useAuthStore from '../store/authStore';
 
 const SearchResultsPage = () => {
   const [searchParams] = useSearchParams();
@@ -19,6 +22,7 @@ const SearchResultsPage = () => {
   const [sortBy, setSortBy] = useState('priceAsc');
   const [showFilters, setShowFilters] = useState(false);
   const { t } = useTranslation();
+  const { currency } = useAuthStore();
 
   const from = searchParams.get('from');
   const to = searchParams.get('to');
@@ -30,7 +34,7 @@ const SearchResultsPage = () => {
   useEffect(() => {
     const fetchAndFilterTrips = async () => {
       setLoading(true);
-      let results = await searchTrips(from, to, departureDate, flexibleDateRange);
+      let results = await searchTrips(from, to, departureDate, flexibleDateRange, currency);
 
       // Apply operator filter
       if (filterOperator !== 'All') {
@@ -84,7 +88,7 @@ const SearchResultsPage = () => {
     if (from && to && departureDate) {
       fetchAndFilterTrips();
     }
-  }, [from, to, departureDate, flexibleDateRange, filterOperator, minPrice, maxPrice, sortBy, amenities, departureTime]);
+  }, [from, to, departureDate, flexibleDateRange, filterOperator, minPrice, maxPrice, sortBy, amenities, departureTime, currency]);
 
   const handleAmenityChange = (e) => {
     const { value, checked } = e.target;
@@ -100,18 +104,10 @@ const SearchResultsPage = () => {
     setSortBy('priceAsc');
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
-  };
+
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 mt-16">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -122,12 +118,12 @@ const SearchResultsPage = () => {
             {t('common.availableTripsFromTo', { from: from, to: to })}
           </h1>
           <p className="text-gray-600">
-            {formatDate(departureDate)} • {trips.length} {trips.length === 1 ? 'trip' : 'trips'} found
+            {formatTripDate(departureDate)} • {trips.length} {trips.length === 1 ? 'trip' : 'trips'} found
           </p>
           {flexibleDateRange && (
             <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-blue-700 text-sm">
-                {t('common.showingResultsFor', { range: flexibleDateRange, date: formatDate(departureDate) })}
+                {t('common.showingResultsFor', { range: flexibleDateRange, date: formatTripDate(departureDate) })}
               </p>
             </div>
           )}
