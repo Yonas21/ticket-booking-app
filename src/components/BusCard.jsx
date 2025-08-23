@@ -4,20 +4,14 @@ import { motion } from 'framer-motion';
 import { MapPin, Clock, Users, Star, ArrowRight, Wifi, Snowflake } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 import { useTranslation } from 'react-i18next';
+import { formatTime } from '../utils/dateUtils';
+import { formatCurrency } from '../utils/currencyUtils';
 
 const BusCard = ({ trip }) => {
   const { currency } = useAuthStore();
   const { t } = useTranslation();
 
-  const getCurrencySymbol = (currencyCode) => {
-    switch (currencyCode) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'GBP': return '£';
-      case 'ETB': return t('common.currencySymbolETB');
-      default: return '$';
-    }
-  };
+
 
   const getAmenityIcon = (amenity) => {
     switch (amenity.toLowerCase()) {
@@ -65,7 +59,7 @@ const BusCard = ({ trip }) => {
         {/* Route and timing */}
         <div className="flex items-center justify-between">
           <div className="text-center">
-            <div className="text-lg font-bold text-gray-900 dark:text-white">{trip.departureTime}</div>
+            <div className="text-lg font-bold text-gray-900 dark:text-white">{formatTime(trip.departureTime)}</div>
             <div className="flex items-center justify-center space-x-1 text-sm text-gray-600 dark:text-gray-300">
               <MapPin className="w-3 h-3" />
               <span>{trip.from}</span>
@@ -86,7 +80,7 @@ const BusCard = ({ trip }) => {
           </div>
           
           <div className="text-center">
-            <div className="text-lg font-bold text-gray-900 dark:text-white">{trip.arrivalTime}</div>
+            <div className="text-lg font-bold text-gray-900 dark:text-white">{formatTime(trip.arrivalTime)}</div>
             <div className="flex items-center justify-center space-x-1 text-sm text-gray-600 dark:text-gray-300">
               <MapPin className="w-3 h-3" />
               <span>{trip.to}</span>
@@ -124,7 +118,7 @@ const BusCard = ({ trip }) => {
         <div className="flex items-center justify-between">
           <div className="space-y-1">
             <div className="text-2xl font-bold text-primary-600">
-              {getCurrencySymbol(currency)}{trip.price}
+              {formatCurrency(trip.price, currency)}
             </div>
             <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
               <Users className="w-4 h-4" />
@@ -139,7 +133,7 @@ const BusCard = ({ trip }) => {
             <Link 
               to={`/booking/${trip.id}`} 
               className="btn-primary-modern flex items-center space-x-2 group-hover:shadow-lg"
-              aria-label={t('common.bookNowForTrip', { from: trip.from, to: trip.to, time: trip.departureTime})}
+              aria-label={t('common.bookNowForTrip', { from: trip.from, to: trip.to, time: formatTime(trip.departureTime)})}
             >
               <span>{t('common.bookNow')}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
