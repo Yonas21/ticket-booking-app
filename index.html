@@ -2,14 +2,108 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/public/bus-favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Book bus tickets online for your next journey. Find the best deals on bus tickets to your favorite destinations." />
-    <meta name="keywords" content="bus, ticket, booking, travel, online, cheap, deals" />
-    <title>Bus Ticket Booking - Your Journey Starts Here</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>BusTicket - Book Bus Tickets Online | Your Journey Starts Here</title>
+    <meta name="description" content="Book bus tickets online for your next journey. Find the best deals on bus tickets across Africa. Secure, fast, and reliable bus booking platform with real-time tracking and instant confirmations." />
+    <meta name="keywords" content="bus tickets, online booking, travel, transportation, bus booking, cheap tickets, Africa travel, intercity buses, express buses, luxury buses, bus schedule, bus routes" />
+    <meta name="author" content="BusTicket" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="BusTicket - Book Bus Tickets Online | Your Journey Starts Here" />
+    <meta property="og:description" content="Book bus tickets online for your next journey. Find the best deals on bus tickets across Africa. Secure, fast, and reliable bus booking platform." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://busticket.com" />
+    <meta property="og:image" content="/logo.svg" />
+    <meta property="og:image:width" content="200" />
+    <meta property="og:image:height" content="60" />
+    <meta property="og:site_name" content="BusTicket" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="BusTicket - Book Bus Tickets Online" />
+    <meta name="twitter:description" content="Book bus tickets online for your next journey. Find the best deals on bus tickets across Africa." />
+    <meta name="twitter:image" content="/logo.svg" />
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://busticket.com" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "BusTicket",
+      "description": "Book bus tickets online for your next journey. Find the best deals on bus tickets across Africa.",
+      "url": "https://busticket.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://busticket.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "BusTicket",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://busticket.com/logo.svg"
+        }
+      }
+    }
+    </script>
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#3B82F6" />
+    <meta name="msapplication-TileColor" content="#3B82F6" />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    
+    <!-- Performance Optimization -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Structured Data for Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "BusTicket",
+      "url": "https://busticket.com",
+      "logo": "https://busticket.com/logo.svg",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-800-BUS-TICKET",
+        "contactType": "customer service",
+        "availableLanguage": ["English", "Amharic"]
+      },
+      "sameAs": [
+        "https://facebook.com/busticket",
+        "https://twitter.com/busticket",
+        "https://instagram.com/busticket"
+      ]
+    }
+    </script>
   </body>
 </html>
