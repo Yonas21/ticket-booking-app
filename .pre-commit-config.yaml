@@ -1,0 +1,118 @@
+repos:
+  # Pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: debug-statements
+      - id: name-tests-test
+      - id: requirements-txt-fixer
+      - id: fix-byte-order-marker
+
+  # ESLint for JavaScript/React
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.57.0
+    hooks:
+      - id: eslint
+        files: \.(js|jsx|ts|tsx)$
+        types: [file]
+        additional_dependencies:
+          - eslint@^8.45.0
+          - eslint-plugin-react@^7.32.2
+          - eslint-plugin-react-hooks@^4.6.0
+          - eslint-plugin-react-refresh@^0.4.3
+          - '@typescript-eslint/eslint-plugin@^6.0.0'
+          - '@typescript-eslint/parser@^6.0.0'
+
+  # Prettier for code formatting
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.2.5
+    hooks:
+      - id: prettier
+        types_or: [javascript, jsx, ts, tsx, json, css, scss, html, yaml, markdown]
+
+  # TypeScript type checking
+  - repo: https://github.com/pre-commit/mirrors-typescript-eslint
+    rev: v6.21.0
+    hooks:
+      - id: typescript-eslint
+        files: \.(ts|tsx)$
+        types: [file]
+
+  # Security checks
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+
+  # Git hooks
+  - repo: local
+    hooks:
+      - id: git-secrets
+        name: git-secrets
+        entry: git secrets --pre_commit_hook
+        language: system
+        pass_filenames: false
+        always_run: true
+
+  # Commit message format
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.20.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+  # Conventional commits
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.20.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+  # Branch naming convention
+  - repo: local
+    hooks:
+      - id: branch-naming
+        name: branch-naming
+        entry: bash -c 'branch=$(git symbolic-ref --short HEAD); if [[ ! $branch =~ ^(feature|bugfix|hotfix|release|chore)/[A-Z]+-[0-9]+-[a-z0-9-]+$ ]]; then echo "Branch name must follow pattern: (feature|bugfix|hotfix|release|chore)/PROJ-123-description"; exit 1; fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+
+  # Package.json validation
+  - repo: local
+    hooks:
+      - id: validate-package-json
+        name: validate-package-json
+        entry: node -e "JSON.parse(require('fs').readFileSync('package.json', 'utf8'))"
+        language: system
+        files: package\.json$
+
+  # Lock file consistency
+  - repo: local
+    hooks:
+      - id: check-lock-files
+        name: check-lock-files
+        entry: bash -c 'if [ -f package-lock.json ] && [ -f yarn.lock ]; then echo "Both package-lock.json and yarn.lock found. Please use only one package manager."; exit 1; fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+
+  # Test files exist
+  - repo: local
+    hooks:
+      - id: check-test-files
+        name: check-test-files
+        entry: bash -c 'for file in $(git diff --cached --name-only --diff-filter=A | grep -E "\.(js|jsx|ts|tsx)$" | grep -v "\.test\.(js|jsx|ts|tsx)$" | grep -v "\.spec\.(js|jsx|ts|tsx)$"); do test_file="${file%.*}.test.${file##*.}"; spec_file="${file%.*}.spec.${file##*.}"; if [ ! -f "$test_file" ] && [ ! -f "$spec_file" ]; then echo "Warning: No test file found for $file"; fi; done'
+        language: system
+        pass_filenames: false
+        always_run: true
